@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+:root {
+  --primary-yellow: #facc15;
+  --primary-pink: #ec4899;
+  --primary-red: #dc2626;
+  --primary: var(--primary-yellow);
+  --primary-border: rgba(255, 255, 255, 0.1);
+}
+
+@theme {
+  --color-primary: var(--primary);
+  --color-primary-yellow: var(--primary-yellow);
+  --color-primary-pink: var(--primary-pink);
+  --color-primary-red: var(--primary-red);
+  --border-color-primary: var(--primary-border);
+}
+
+@layer base {
+  html,
+  body {
+    font-family: "Poppins", sans-serif;
+  }
+}
+
+@layer utilities {
+  .bg-grid-pattern {
+    background-size: 40px 40px;
+    background-image: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.05) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  }
+
+  .bg-grid-mask {
+    background-size: 40px 40px;
+    background-image: linear-gradient(to right, black 1px, transparent 1px),
+      linear-gradient(to bottom, black 1px, transparent 1px);
+  }
+
+  @keyframes gradient-flow {
+    0% {
+      background-position: 0% 0%;
+    }
+    100% {
+      background-position: 0% 100%;
+    }
+  }
+
+  .bg-primary-gradient {
+    background: linear-gradient(
+      to right,
+      var(--primary-yellow),
+      var(--primary-pink),
+      var(--primary-red)
+    );
+  }
+
+  .text-gradient {
+    background: linear-gradient(to right, #facc15, #ec4899, #dc2626);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hover-text-gradient:hover {
+    background: linear-gradient(to right, #facc15, #ec4899, #dc2626);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .border-gradient {
+    position: relative;
+  }
+
+  .border-gradient::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px; /* This is the border thickness */
+    background: linear-gradient(to right, #facc15, #ec4899, #dc2626);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .animate-gradient-flow {
+    animation: gradient-flow 2s linear infinite;
+    background-size: 100% 400%;
+  }
+
+  .smooth {
+    transition: all 0.3s ease-in-out;
+  }
+}
