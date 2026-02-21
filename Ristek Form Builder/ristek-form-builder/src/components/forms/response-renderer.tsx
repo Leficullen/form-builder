@@ -1,0 +1,1 @@
+export function responserenderer() { return <div>responserenderer Component</div>; }
