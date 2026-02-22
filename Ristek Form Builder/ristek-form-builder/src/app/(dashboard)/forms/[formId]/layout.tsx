@@ -39,9 +39,9 @@ export default function FormLayout({
   ];
 
   return (
-    <div className="flex w-full bg-background relative z-20 h-[calc(100vh-97px)] overflow-hidden">
+    <div className="flex w-full bg-background relative z-20">
       {/* Sidebar */}
-      <div className="hidden lg:flex flex-col w-[320px] shrink-0 border-r border-foreground/10 h-full bg-card">
+      <div className="hidden lg:flex flex-col w-[320px] shrink-0 border-r border-foreground/10 h-[calc(100vh-97px)] sticky top-[97px] bg-card">
         {/* Sidebar Header */}
         <div className="p-8 pb-6 flex items-center gap-4 border-b border-transparent">
           <Link
@@ -90,7 +90,7 @@ export default function FormLayout({
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col bg-background h-full overflow-y-auto">
+      <div className="flex-1 flex flex-col bg-background">
         <div className="max-w-[800px] mx-auto w-full p-8 flex flex-col gap-5 flex-1 pb-16">
           {/* Banner */}
           <div

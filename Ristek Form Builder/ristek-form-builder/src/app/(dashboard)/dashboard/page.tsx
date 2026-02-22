@@ -64,9 +64,9 @@ export default function DashboardPage() {
         {/* Tabs */}
         <Tabs defaultValue="all" className="w-full mb-8">
           <TabsList variant="underline">
-            <TabsTrigger value="all">All (2)</TabsTrigger>
-            <TabsTrigger value="published">Published (1)</TabsTrigger>
-            <TabsTrigger value="not-published">Not Published (1)</TabsTrigger>
+            <TabsTrigger value="all">All <span className="ml-2"> ({filteredForms.length})</span></TabsTrigger>
+            <TabsTrigger value="published">Published <span className="ml-2"> ({filteredForms.filter((form) => form.isPublished).length})</span></TabsTrigger>
+            <TabsTrigger value="not-published">Not Published <span className="ml-2"> ({filteredForms.filter((form) => !form.isPublished).length})</span></TabsTrigger>
           </TabsList>
 
           <TabsContent value="all" className="mt-6">
