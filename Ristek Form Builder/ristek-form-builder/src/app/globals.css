@@ -12,7 +12,7 @@
   --primary-dark: #6248dc;
   --hover: #e1e5fe;
 
-  --card: #ffffff;
+  --card: #f9fafb;
   --card-foreground: #333333;
   --popover: #ffffff;
   --popover-foreground: #333333;
@@ -28,6 +28,31 @@
   --input: #e4e4e7;
   --ring: #5038bc;
   --radius: 0.75rem;
+}
+
+.dark {
+  --background: #09090b;
+  --foreground: #fafafa;
+  --primary: #6248dc;
+  --primary-foreground: #ffffff;
+  --primary-dark: #7a66e6;
+  --hover: #27272a;
+
+  --card: #2c2c2c;
+  --card-foreground: #fafafa;
+  --popover: #09090b;
+  --popover-foreground: #fafafa;
+  --secondary: #27272a;
+  --secondary-foreground: #fafafa;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+  --accent: #27272a;
+  --accent-foreground: #fafafa;
+  --destructive: #991b1b;
+  --destructive-foreground: #fafafa;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #6248dc;
 }
 
 @theme {
@@ -77,6 +102,34 @@
     }
     to {
       height: 0;
+    }
+  }
+
+  --animate-wave: wave 2.5s infinite ease-in-out;
+  @keyframes wave {
+    0% {
+      transform: rotate(0deg);
+    }
+    10% {
+      transform: rotate(14deg);
+    }
+    20% {
+      transform: rotate(-8deg);
+    }
+    30% {
+      transform: rotate(14deg);
+    }
+    40% {
+      transform: rotate(-4deg);
+    }
+    50% {
+      transform: rotate(10deg);
+    }
+    60% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(0deg);
     }
   }
 }
