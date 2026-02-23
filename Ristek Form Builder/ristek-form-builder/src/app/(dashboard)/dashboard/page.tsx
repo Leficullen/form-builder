@@ -25,7 +25,7 @@ export default function DashboardPage() {
   return (
     <div className="flex flex-col flex-1 min-h-screen relative bg-background">
       {/* Main Content Space */}
-      <main className="flex-1 w-full max-w-[1280px] mx-auto px-8 pt-10 pb-20">
+      <main className="flex-1 w-full max-w-6xl mx-auto px-8 pt-10 pb-20">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
           <h1 className="text-4xl  font-bold text-primary tracking-tight dark:text-foreground">
             Your Form

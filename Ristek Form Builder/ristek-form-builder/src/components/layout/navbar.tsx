@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export function Navbar() {
   return (
-    <header className="sticky top-0 z-50 flex w-full items-center justify-between border-b border-foreground/10 px-8 py-4 transition-colors duration-200 bg-background/70 backdrop-blur-md">
+    <header className="sticky top-0 z-50 flex w-full items-center justify-between border-b border-foreground/10 px-8 py-2 transition-colors duration-200 bg-background/70 backdrop-blur-md">
       <div className="flex items-center">
         <img
           src="/login-register-assets/logo-with-text.png"
