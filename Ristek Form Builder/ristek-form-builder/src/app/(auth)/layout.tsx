@@ -32,7 +32,7 @@ export default function AuthLayout({
       </div>
 
       {/* Right side - Form panel */}
-      <div className="flex flex-col justify-center px-16 bg-card text-foreground transition-colors duration-200 my-auto mx-auto">
+      <div className="flex flex-col justify-center px-16 bg-card text-foreground transition-colors duration-200">
         <div className="w-full ">{children}</div>
       </div>
     </div>

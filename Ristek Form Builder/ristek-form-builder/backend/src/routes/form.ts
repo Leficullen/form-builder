@@ -11,9 +11,10 @@ const formCreateSchema = z.object({
   status: z.enum(["DRAFT", "PUBLISHED"]).optional(),
 });
 
-router.get("/", async (_req, res, next) => {
+router.get("/", requireAuth as any, async (req: any, res, next) => {
   try {
     const forms = await prisma.form.findMany({
+      where: { ownerId: req.userId },
       orderBy: { createdAt: "desc" },
       select: {
         id: true,
@@ -25,7 +26,17 @@ router.get("/", async (_req, res, next) => {
         ownerId: true,
       },
     });
-    res.json({ forms });
+
+    const mappedForms = forms.map((f:any) => ({
+      id: f.id,
+      title: f.title,
+      description: f.description,
+      isPublished: f.status === "PUBLISHED",
+      date: f.createdAt.toISOString().split("T")[0],
+      questionCount: 0,
+    }));
+
+    res.json({ forms: mappedForms });
   } catch (e) {
     next(e);
   }

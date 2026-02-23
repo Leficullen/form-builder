@@ -55,9 +55,11 @@ export default function RegisterPage() {
           className="w-[50%] mx-auto hidden dark:block"
         />
       </div>
-      <div className="flex flex-col  my-[10%] space-y-8 max-w-lg mx-auto">
+      <div className="flex flex-col w-full my-[10%] space-y-8 max-w-lg mx-auto">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-primary">Register</h1>
+          <h1 className="text-3xl font-bold text-primary dark:text-primary-dark">
+            Register
+          </h1>
         </div>
 
         <form className="flex flex-col space-y-4" onSubmit={handleRegister}>

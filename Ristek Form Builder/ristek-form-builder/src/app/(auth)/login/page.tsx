@@ -57,14 +57,14 @@ export default function LoginPage() {
           className="w-[50%] mx-auto hidden dark:block"
         />
       </div>
-      <div className="flex flex-col my-[7%] space-y-8">
+      <div className="flex flex-col space-y-8 w-full max-w-lg mx-auto my-[10%]">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-primary dark:text-primary-dark">
             Login
           </h1>
         </div>
 
-        <form className="flex flex-col space-y-4" onSubmit={handleLogin}>
+        <form className="flex flex-col space-y-4 " onSubmit={handleLogin}>
           <div className="space-y-4">
             <Input
               type="email"

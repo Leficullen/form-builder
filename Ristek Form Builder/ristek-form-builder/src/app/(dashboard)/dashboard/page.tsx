@@ -1,26 +1,93 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { FormCard } from "@/components/ui/form-card";
 import { useRouter } from "next/navigation";
 
-import { DUMMY_FORMS } from "@/lib/dummy-data";
+import { fetchApi } from "@/lib/api";
+import { getToken } from "@/lib/token";
+import { toast } from "sonner";
+
+type FormProps = {
+  id: string;
+  title: string;
+  description: string;
+  isPublished: boolean;
+  questionCount: number;
+  date: string;
+};
 
 export default function DashboardPage() {
   const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [forms, setForms] = useState<FormProps[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isCreating, setIsCreating] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    if (!getToken()) {
+      setTimeout(() => toast.error("You are not logged in!"), 0);
+      router.push("/login");
+    }
+  }, [router]);
+
+  useEffect(() => {
+    if (!getToken()) return;
+
+    const fetchForms = async () => {
+      try {
+        const response = await fetchApi("/forms");
+        if (response && response.forms) {
+          setForms(response.forms);
+        }
+      } catch (error) {
+        console.error("Failed to fetch forms:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchForms();
+  }, []);
+
+  const handleCreateForm = async () => {
+    try {
+      setIsCreating(true);
+      const payload = {
+        title: "Untitled Form",
+        description: "",
+      };
+      const data = await fetchApi("/forms", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+
+      if (data && data.form) {
+        router.push(`/forms/${data.form.id}/edit`);
+      }
+    } catch (error) {
+      console.error("Failed to create form:", error);
+      setIsCreating(false);
+    }
+  };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
-  const filteredForms = DUMMY_FORMS.filter((form) =>
+  const filteredForms = forms.filter((form) =>
     form.title.toLowerCase().includes(searchTerm.toLowerCase()),
   );
+
+  if (!isMounted || !getToken()) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col flex-1 min-h-screen relative bg-background">
@@ -39,10 +106,12 @@ export default function DashboardPage() {
 
             <Button
               variant="outline"
-              className="text-primary border-primary border-2 rounded-xl h-12 shadow-sm bg-background"
+              className="text-primary border-primary border-2 rounded-xl h-12 shadow-sm bg-background disabled:opacity-50"
+              onClick={handleCreateForm}
+              disabled={isCreating}
             >
               <Plus className="size-5 font-bold mr-1" />
-              Create New Form
+              {isCreating ? "Creating..." : "Create New Form"}
             </Button>
           </div>
         </div>
@@ -64,18 +133,38 @@ export default function DashboardPage() {
         {/* Tabs */}
         <Tabs defaultValue="all" className="w-full mb-8">
           <TabsList variant="underline">
-            <TabsTrigger value="all">All <span className="ml-2"> ({filteredForms.length})</span></TabsTrigger>
-            <TabsTrigger value="published">Published <span className="ml-2"> ({filteredForms.filter((form) => form.isPublished).length})</span></TabsTrigger>
-            <TabsTrigger value="not-published">Not Published <span className="ml-2"> ({filteredForms.filter((form) => !form.isPublished).length})</span></TabsTrigger>
+            <TabsTrigger value="all">
+              All <span className="ml-2"> ({filteredForms.length})</span>
+            </TabsTrigger>
+            <TabsTrigger value="published">
+              Published{" "}
+              <span className="ml-2">
+                {" "}
+                ({filteredForms.filter((form) => form.isPublished).length})
+              </span>
+            </TabsTrigger>
+            <TabsTrigger value="not-published">
+              Not Published{" "}
+              <span className="ml-2">
+                {" "}
+                ({filteredForms.filter((form) => !form.isPublished).length})
+              </span>
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="all" className="mt-6">
             <div className="">
               <div
-                className={`bg-background grid gap-4 p-4 rounded-[16px] border-2 border-border ${filteredForms.length === 0 ? "grid-cols-1" : "grid-cols-2"}`}
+                className={`bg-background grid gap-4 p-4 rounded-[16px] border-2 border-border ${filteredForms.length === 0 || isLoading ? "grid-cols-1" : "grid-cols-2"}`}
               >
-                {filteredForms.length === 0 && (
-                  <div className="flex flex-col items-center justify-center h-full w-full">
+                {isLoading ? (
+                  <div className="flex flex-col items-center justify-center h-full w-full py-10">
+                    <p className="text-foreground animate-pulse font-medium">
+                      Loading forms...
+                    </p>
+                  </div>
+                ) : filteredForms.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center h-full w-full py-10">
                     <img src="ruby-searching.png" alt="" className="w-40" />
                     <h3 className="text-foreground font-semibold text-xl">
                       No Forms Yet
@@ -84,82 +173,97 @@ export default function DashboardPage() {
                       Create your first form to get started
                     </p>
                   </div>
+                ) : (
+                  filteredForms.map((form) => (
+                    <FormCard
+                      key={form.id}
+                      title={form.title}
+                      description={form.description}
+                      isPublished={form.isPublished}
+                      questionCount={form.questionCount}
+                      date={form.date}
+                      onClick={() => router.push(`/forms/${form.id}/edit`)}
+                    />
+                  ))
                 )}
-                {filteredForms.map((form) => (
-                  <FormCard
-                    key={form.id}
-                    title={form.title}
-                    description={form.description}
-                    isPublished={form.isPublished}
-                    questionCount={form.questionCount}
-                    date={form.date}
-                    onClick={() => router.push(`/forms/${form.id}/edit`)}
-                  />
-                ))}
               </div>
             </div>
           </TabsContent>
           <TabsContent value="published" className="mt-6">
             <div className="">
               <div
-                className={`bg-background grid gap-4 p-4 rounded-[16px] border-2 border-border ${filteredForms.length === 0 ? "grid-cols-1" : "grid-cols-2"}`}
+                className={`bg-background grid gap-4 p-4 rounded-[16px] border-2 border-border ${filteredForms.filter((f) => f.isPublished).length === 0 || isLoading ? "grid-cols-1" : "grid-cols-2"}`}
               >
-                {filteredForms.length === 0 && (
-                  <div className="flex flex-col items-center justify-center h-full w-full">
-                    <img src="ruby-searching.png" alt="" className="w-40" />
-                    <h3 className="text-foreground font-semibold text-xl">
-                      No Forms Yet
-                    </h3>
-                    <p className="text-foreground/50">
-                      Create your first form to get started
+                {isLoading ? (
+                  <div className="flex flex-col items-center justify-center h-full w-full py-10">
+                    <p className="text-foreground animate-pulse font-medium">
+                      Loading forms...
                     </p>
                   </div>
+                ) : filteredForms.filter((f) => f.isPublished).length === 0 ? (
+                  <div className="flex flex-col items-center justify-center h-full w-full py-10">
+                    <img src="ruby-searching.png" alt="" className="w-40" />
+                    <h3 className="text-foreground font-semibold text-xl">
+                      No Published Forms
+                    </h3>
+                    <p className="text-foreground/50">
+                      You haven't published any forms yet
+                    </p>
+                  </div>
+                ) : (
+                  filteredForms
+                    .filter((form) => form.isPublished)
+                    .map((form) => (
+                      <FormCard
+                        key={form.id}
+                        title={form.title}
+                        description={form.description}
+                        isPublished={form.isPublished}
+                        questionCount={form.questionCount}
+                        date={form.date}
+                        onClick={() => router.push(`/forms/${form.id}/edit`)}
+                      />
+                    ))
                 )}
-                {filteredForms
-                  .filter((form) => form.isPublished)
-                  .map((form) => (
-                    <FormCard
-                      key={form.id}
-                      title={form.title}
-                      description={form.description}
-                      isPublished={form.isPublished}
-                      questionCount={form.questionCount}
-                      date={form.date}
-                      onClick={() => router.push(`/forms/${form.id}/edit`)}
-                    />
-                  ))}
               </div>
             </div>
           </TabsContent>
           <TabsContent value="not-published" className="mt-6">
             <div className="">
               <div
-                className={`bg-background grid gap-4 p-4 rounded-[16px] border-2 border-border ${filteredForms.length === 0 ? "grid-cols-1" : "grid-cols-2"}`}
+                className={`bg-background grid gap-4 p-4 rounded-[16px] border-2 border-border ${filteredForms.filter((f) => !f.isPublished).length === 0 || isLoading ? "grid-cols-1" : "grid-cols-2"}`}
               >
-                {filteredForms.length === 0 && (
-                  <div className="flex flex-col items-center justify-center h-full w-full">
-                    <img src="ruby-searching.png" alt="" className="w-40" />
-                    <h3 className="text-foreground font-semibold text-xl">
-                      No Forms Yet
-                    </h3>
-                    <p className="text-foreground/50">
-                      Create your first form to get started
+                {isLoading ? (
+                  <div className="flex flex-col items-center justify-center h-full w-full py-10">
+                    <p className="text-foreground animate-pulse font-medium">
+                      Loading forms...
                     </p>
                   </div>
+                ) : filteredForms.filter((f) => !f.isPublished).length === 0 ? (
+                  <div className="flex flex-col items-center justify-center h-full w-full py-10">
+                    <img src="ruby-searching.png" alt="" className="w-40" />
+                    <h3 className="text-foreground font-semibold text-xl">
+                      No Draft Forms
+                    </h3>
+                    <p className="text-foreground/50">
+                      You don't have any unpublished forms
+                    </p>
+                  </div>
+                ) : (
+                  filteredForms
+                    .filter((f) => !f.isPublished)
+                    .map((form) => (
+                      <FormCard
+                        key={form.id}
+                        title={form.title}
+                        description={form.description}
+                        isPublished={form.isPublished}
+                        questionCount={form.questionCount}
+                        date={form.date}
+                        onClick={() => router.push(`/forms/${form.id}/edit`)}
+                      />
+                    ))
                 )}
-                {filteredForms
-                  .filter((f) => !f.isPublished)
-                  .map((form) => (
-                    <FormCard
-                      key={form.id}
-                      title={form.title}
-                      description={form.description}
-                      isPublished={form.isPublished}
-                      questionCount={form.questionCount}
-                      date={form.date}
-                      onClick={() => router.push(`/forms/${form.id}/edit`)}
-                    />
-                  ))}
               </div>
             </div>
           </TabsContent>

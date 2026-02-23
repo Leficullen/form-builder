@@ -16,7 +16,7 @@ export function requireAuth(
   const token = header.slice("Bearer ".length);
 
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET!) as {
+    const payload = jwt.verify(token, process.env.AUTH_SECRET!) as {
       sub: string;
     };
     req.userId = payload.sub;
