@@ -2,6 +2,12 @@ import React from "react";
 import { Trash2, ListTodo } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+const handleDelete = () => {
+
+  
+}
+
+
 interface FormCardProps {
   title: string;
   isPublished: boolean;
@@ -39,10 +45,7 @@ export function FormCard({
             {title}
           </h3>
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete?.(e);
-            }}
+            
             className="text-muted-foreground/40 hover:text-destructive transition-colors p-2 -mr-2"
           >
             <Trash2 className="w-7 h-7" />
