@@ -12,7 +12,7 @@ export function Footer() {
 
   return (
     <footer className="w-full bg-card border-t border-foreground/5 pt-16 pb-8 px-8 mt-auto">
-      <div className="mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+      <div className="mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 max-w-7xl">
         {/* Brand Section */}
         <div className="space-y-6">
           <div className="flex items-center space-x-2">

@@ -13,17 +13,16 @@ export function Navbar() {
   const pathname = usePathname();
 
   const [authorized, setAuthorized] = useState(false);
-
-  const isAuth = !!localStorage.getItem("token");
-
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (!getToken()) {
-      setAuthorized(!true);
-    }
-  }, []);
+    setMounted(true);
+    const token = getToken();
+    setAuthorized(!!token);
+  }, [pathname]);
 
-  const isAuthPage = pathname === "/login" || pathname === "/register";
+  const isAuthPage =
+    pathname?.startsWith("/login") || pathname?.startsWith("/register");
 
   if (isAuthPage) return null;
 
@@ -56,38 +55,36 @@ export function Navbar() {
       <div className="flex items-center space-x-10">
         <ModeToggle />
         {navLink.map((nav) => (
-          <p
+          <Link
             key={nav.name}
+            href={nav.href}
             className={`items-center h-full hover:text-primary transition-colors duration-200 focus:font-semibold text-foreground/70 font-semibold text-lg ${pathname == nav.href ? "font-semibold text-primary" : ""} `}
-            onClick={() => router.push(nav.href)}
           >
-            <Link href={nav.href}>{nav.name}</Link>
-          </p>
+            {nav.name}
+          </Link>
         ))}
 
-        {authorized ? (
-          <Button
-            className="bg-primary hover:bg-primary/90 active:bg-primary/80 font-bold rounded-xl px-6 h-10 shadow-sm text-md text-white"
-            onClick={() => router.push("/login")}
-          >
-            Login
-          </Button>
-        ) : (
-          <Button
-            className="bg-red-500 hover:bg-red-600 active:bg-red-700 font-bold rounded-xl px-6 h-10 shadow-sm text-md text-white"
-            onClick={() => {
-              removeToken();
-              router.push("/login");
-            }}
-          >
-            Logout
-          </Button>
-        )}
+        {mounted &&
+          (authorized ? (
+            <Button
+              className="bg-red-500 hover:bg-red-600 active:bg-red-700 font-bold rounded-xl px-6 h-10 shadow-sm text-md text-white"
+              onClick={() => {
+                removeToken();
+                setAuthorized(false);
+                router.push("/login");
+              }}
+            >
+              Logout
+            </Button>
+          ) : (
+            <Button
+              className="bg-primary hover:bg-primary/90 active:bg-primary/80 font-bold rounded-xl px-6 h-10 shadow-sm text-md text-white"
+              onClick={() => router.push("/login")}
+            >
+              Login
+            </Button>
+          ))}
       </div>
     </header>
-  ); 
+  );
 }
-function setIsMounted(arg0: boolean) {
-  throw new Error("Function not implemented.");
-}
-

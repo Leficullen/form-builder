@@ -1,5 +1,12 @@
 import React from "react";
 import { Trash2, X } from "lucide-react";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Tooltip as RechartsTooltip,
+} from "recharts";
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
@@ -28,6 +35,7 @@ export interface ResponseStat {
   count: number;
   percentage: string;
   color: string;
+  hexColor?: string;
 }
 
 export interface QuestionData {
@@ -247,7 +255,48 @@ export function FormQuestion({
 
             {isResponse && question.stats && (
               <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12 pl-2 mt-2">
-                <div className="w-[120px] h-[120px] shrink-0 rounded-full bg-[#b1229f] shadow-inner border-[4px] border-card"></div>
+                <div className="w-[120px] h-[120px] shrink-0">
+                  {question.stats.some((s) => s.count > 0) ? (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={question.stats}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={30}
+                          outerRadius={55}
+                          dataKey="count"
+                          stroke="none"
+                          isAnimationActive={false}
+                        >
+                          {question.stats.map((entry, index) => (
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={entry.hexColor || "#ccc"}
+                            />
+                          ))}
+                        </Pie>
+                        <RechartsTooltip
+                          contentStyle={{
+                            borderRadius: "8px",
+                            border: "none",
+                            boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                            padding: "4px 8px",
+                          }}
+                          itemStyle={{
+                            color: "#000",
+                            fontSize: "11px",
+                            fontWeight: 600,
+                          }}
+                        />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div className="w-full h-full rounded-full bg-muted flex items-center justify-center border-[4px] border-card shadow-sm text-[10px] text-muted-foreground font-medium">
+                      No Data
+                    </div>
+                  )}
+                </div>
                 <div className="flex w-full flex-col gap-3">
                   {question.stats.map((stat, i) => (
                     <div
@@ -431,7 +480,48 @@ export function FormQuestion({
 
             {isResponse && question.stats && (
               <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12 pl-2 mt-2">
-                <div className="w-[120px] h-[120px] shrink-0 rounded-full bg-[#b1229f] shadow-inner border-[4px] border-card"></div>
+                <div className="w-[120px] h-[120px] shrink-0">
+                  {question.stats.some((s) => s.count > 0) ? (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={question.stats}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={30}
+                          outerRadius={55}
+                          dataKey="count"
+                          stroke="none"
+                          isAnimationActive={false}
+                        >
+                          {question.stats.map((entry, index) => (
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={entry.hexColor || "#ccc"}
+                            />
+                          ))}
+                        </Pie>
+                        <RechartsTooltip
+                          contentStyle={{
+                            borderRadius: "8px",
+                            border: "none",
+                            boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                            padding: "4px 8px",
+                          }}
+                          itemStyle={{
+                            color: "#000",
+                            fontSize: "11px",
+                            fontWeight: 600,
+                          }}
+                        />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div className="w-full h-full rounded-full bg-muted flex items-center justify-center border-[4px] border-card shadow-sm text-[10px] text-muted-foreground font-medium">
+                      No Data
+                    </div>
+                  )}
+                </div>
                 <div className="flex w-full flex-col gap-3">
                   {question.stats.map((stat, i) => (
                     <div

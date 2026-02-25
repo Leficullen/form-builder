@@ -8,7 +8,7 @@ export default function AuthLayout({
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-[10fr_9fr] overflow-hidden">
       {/* Left side - Brand panel */}
-      <div className="hidden md:block bg-primary relative">
+      <div className="hidden md:block bg-gradient-to-b from-primary-dark to-primary relative">
         <img
           src="login-register-assets/separator.png"
           alt=""

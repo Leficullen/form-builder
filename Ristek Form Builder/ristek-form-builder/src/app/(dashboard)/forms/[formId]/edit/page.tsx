@@ -177,7 +177,7 @@ export default function EditFormPage() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Form Description"
-              className="text-white/90 text-xs md:text-sm rounded-lg px-4  w-full max-w-xl text-center bg-transparent border-transparent outline-none focus:ring-0 focus:bg-white/10 hover:bg-white/5 transition-colors placeholder:text-white cursor-text "
+              className="text-white/90 text-xs md:text-sm rounded-lg px-4  w-full max-w-xl text-center bg-transparent border-transparent outline-none focus:ring-0 focus:bg-white/10 hover:bg-white/5 transition-colors placeholder:text-white cursor-text h-fit "
             />
           </div>
         </div>

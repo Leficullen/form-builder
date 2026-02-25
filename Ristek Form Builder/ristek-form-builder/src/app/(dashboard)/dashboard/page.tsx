@@ -17,7 +17,14 @@ type FormProps = {
   description: string;
   isPublished: boolean;
   questionCount: number;
+  responseCount: number;
   date: string;
+};
+
+type User = {
+  id: string;
+  name: string;
+  email: string;
 };
 
 export default function DashboardPage() {
@@ -28,6 +35,7 @@ export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -35,6 +43,21 @@ export default function DashboardPage() {
       setTimeout(() => toast.error("You are not logged in!"), 0);
       router.push("/login");
     }
+
+    const fetchUser = async () => {
+      try {
+        const response = await fetchApi("/user");
+        console.log("Fetch user response:", response);
+        const userData = response?.user || response;
+        if (userData && userData.name) {
+          setUser(userData);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    };
+
+    fetchUser();
   }, [router]);
 
   useEffect(() => {
@@ -95,7 +118,7 @@ export default function DashboardPage() {
       <main className="flex-1 w-full max-w-6xl mx-auto px-8 pt-10 pb-20">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
           <h1 className="text-4xl  font-bold text-primary tracking-tight dark:text-foreground">
-            Your Form
+            Hello, {user?.name || "..."}
           </h1>
 
           <div className="flex items-center space-x-4">
@@ -129,7 +152,9 @@ export default function DashboardPage() {
             value={searchTerm}
           />
         </div>
-        <div className="bg-background p-4 border-border border-2 rounded-2xl">
+
+        {/* Forms Content */}
+        <div className="bg-background px-6 py-8 border-border border-2 rounded-2xl">
           <Tabs defaultValue="all" className="w-full mb-8">
             <TabsList variant="underline">
               <TabsTrigger value="all">
@@ -180,6 +205,7 @@ export default function DashboardPage() {
                         description={form.description}
                         isPublished={form.isPublished}
                         questionCount={form.questionCount}
+                        responseCount={form.responseCount}
                         date={form.date}
                         onClick={() => router.push(`/forms/${form.id}/edit`)}
                       />
@@ -220,6 +246,7 @@ export default function DashboardPage() {
                           description={form.description}
                           isPublished={form.isPublished}
                           questionCount={form.questionCount}
+                          responseCount={form.responseCount}
                           date={form.date}
                           onClick={() => router.push(`/forms/${form.id}/edit`)}
                         />
@@ -260,6 +287,7 @@ export default function DashboardPage() {
                           description={form.description}
                           isPublished={form.isPublished}
                           questionCount={form.questionCount}
+                          responseCount={form.responseCount}
                           date={form.date}
                           onClick={() => router.push(`/forms/${form.id}/edit`)}
                         />
