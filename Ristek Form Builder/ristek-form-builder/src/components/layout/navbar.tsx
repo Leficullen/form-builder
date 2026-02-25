@@ -2,14 +2,44 @@
 
 import { Button } from "../ui/button";
 import { ModeToggle } from "@/components/mode-toggle";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { removeToken } from "@/lib/token";
+import Link from "next/link";
+import { getToken } from "@/lib/token";
+import { use, useEffect, useState } from "react";
 
 export function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
+
+  const [authorized, setAuthorized] = useState(false);
+
+  const isAuth = !!localStorage.getItem("token");
+
+
+  useEffect(() => {
+    if (!getToken()) {
+      setAuthorized(!true);
+    }
+  }, []);
+
+  const isAuthPage = pathname === "/login" || pathname === "/register";
+
+  if (isAuthPage) return null;
+
+  const navLink = [
+    {
+      name: "Tutorial",
+      href: "/tutorial",
+    },
+    {
+      name: "Dashboard",
+      href: "/dashboard",
+    },
+  ];
 
   return (
-    <header className="sticky top-0 z-50 flex w-full items-center justify-between border-b border-foreground/10 px-8 py-2 transition-colors duration-200 bg-background/70 backdrop-blur-md">
+    <header className="fixed top-0 z-50 flex w-full items-center justify-between border-b border-foreground/10 px-8 py-2 transition-colors duration-200 bg-background/70 backdrop-blur-md">
       <div className="flex items-center">
         <img
           src="/login-register-assets/logo-with-text.png"
@@ -23,19 +53,41 @@ export function Navbar() {
         />
       </div>
 
-      <div className="flex items-center space-x-6">
+      <div className="flex items-center space-x-10">
         <ModeToggle />
+        {navLink.map((nav) => (
+          <p
+            key={nav.name}
+            className={`items-center h-full hover:text-primary transition-colors duration-200 focus:font-semibold text-foreground/70 font-semibold text-lg ${pathname == nav.href ? "font-semibold text-primary" : ""} `}
+            onClick={() => router.push(nav.href)}
+          >
+            <Link href={nav.href}>{nav.name}</Link>
+          </p>
+        ))}
 
-        <Button
-          className="bg-red-500 hover:bg-red-600 active:bg-red-700 font-bold rounded-xl px-6 h-10 shadow-sm text-md text-white"
-          onClick={() => {
-            removeToken();
-            router.push("/login");
-          }}
-        >
-          Logout
-        </Button>
+        {authorized ? (
+          <Button
+            className="bg-primary hover:bg-primary/90 active:bg-primary/80 font-bold rounded-xl px-6 h-10 shadow-sm text-md text-white"
+            onClick={() => router.push("/login")}
+          >
+            Login
+          </Button>
+        ) : (
+          <Button
+            className="bg-red-500 hover:bg-red-600 active:bg-red-700 font-bold rounded-xl px-6 h-10 shadow-sm text-md text-white"
+            onClick={() => {
+              removeToken();
+              router.push("/login");
+            }}
+          >
+            Logout
+          </Button>
+        )}
       </div>
     </header>
-  );
+  ); 
 }
+function setIsMounted(arg0: boolean) {
+  throw new Error("Function not implemented.");
+}
+

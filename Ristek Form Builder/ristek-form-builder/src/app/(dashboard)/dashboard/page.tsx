@@ -123,151 +123,155 @@ export default function DashboardPage() {
           </div>
           <input
             type="text"
-            className="w-full pl-12 pr-4 py-3 rounded-full bg-card  placeholder:text-foreground/50 font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-foreground border-2 border-border "
+            className="w-full pl-12 pr-4 py-3 rounded-full bg-card  placeholder:text-foreground/50 font-medium focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-foreground border-2 border-border "
             placeholder="Search your form here..."
             onChange={handleSearch}
             value={searchTerm}
           />
         </div>
+        <div className="bg-background p-4 border-border border-2 rounded-2xl">
+          <Tabs defaultValue="all" className="w-full mb-8">
+            <TabsList variant="underline">
+              <TabsTrigger value="all">
+                All <span className="ml-2"> ({filteredForms.length})</span>
+              </TabsTrigger>
+              <TabsTrigger value="published">
+                Published{" "}
+                <span className="ml-2">
+                  {" "}
+                  ({filteredForms.filter((form) => form.isPublished).length})
+                </span>
+              </TabsTrigger>
+              <TabsTrigger value="not-published">
+                Not Published{" "}
+                <span className="ml-2">
+                  {" "}
+                  ({filteredForms.filter((form) => !form.isPublished).length})
+                </span>
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="all" className="mt-6">
+              <div className="">
+                <div
+                  className={`grid gap-4 rounded-2xl ${filteredForms.length === 0 || isLoading ? "grid-cols-1" : "grid-cols-2"}`}
+                >
+                  {isLoading ? (
+                    <div className="flex flex-col items-center justify-center h-full w-full py-10">
+                      <p className="text-foreground animate-pulse font-medium">
+                        Loading forms...
+                      </p>
+                    </div>
+                  ) : filteredForms.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center h-full w-full py-10">
+                      <img src="ruby-searching.png" alt="" className="w-40" />
+                      <h3 className="text-foreground font-semibold text-xl">
+                        No Forms Yet
+                      </h3>
+                      <p className="text-foreground/50">
+                        Create your first form to get started
+                      </p>
+                    </div>
+                  ) : (
+                    filteredForms.map((form) => (
+                      <FormCard
+                        key={form.id}
+                        title={form.title}
+                        description={form.description}
+                        isPublished={form.isPublished}
+                        questionCount={form.questionCount}
+                        date={form.date}
+                        onClick={() => router.push(`/forms/${form.id}/edit`)}
+                      />
+                    ))
+                  )}
+                </div>
+              </div>
+            </TabsContent>
+            <TabsContent value="published" className="mt-6">
+              <div className="">
+                <div
+                  className={`bg-background grid gap-4 p-4 rounded-[16px] border-2 border-border ${filteredForms.filter((f) => f.isPublished).length === 0 || isLoading ? "grid-cols-1" : "grid-cols-2"}`}
+                >
+                  {isLoading ? (
+                    <div className="flex flex-col items-center justify-center h-full w-full py-10">
+                      <p className="text-foreground animate-pulse font-medium">
+                        Loading forms...
+                      </p>
+                    </div>
+                  ) : filteredForms.filter((f) => f.isPublished).length ===
+                    0 ? (
+                    <div className="flex flex-col items-center justify-center h-full w-full py-10">
+                      <img src="ruby-searching.png" alt="" className="w-40" />
+                      <h3 className="text-foreground font-semibold text-xl">
+                        No Published Forms
+                      </h3>
+                      <p className="text-foreground/50">
+                        You haven't published any forms yet
+                      </p>
+                    </div>
+                  ) : (
+                    filteredForms
+                      .filter((form) => form.isPublished)
+                      .map((form) => (
+                        <FormCard
+                          key={form.id}
+                          title={form.title}
+                          description={form.description}
+                          isPublished={form.isPublished}
+                          questionCount={form.questionCount}
+                          date={form.date}
+                          onClick={() => router.push(`/forms/${form.id}/edit`)}
+                        />
+                      ))
+                  )}
+                </div>
+              </div>
+            </TabsContent>
+            <TabsContent value="not-published" className="mt-6">
+              <div className="">
+                <div
+                  className={`bg-background grid gap-4 p-4 rounded-[16px] border-2 border-border ${filteredForms.filter((f) => !f.isPublished).length === 0 || isLoading ? "grid-cols-1" : "grid-cols-2"}`}
+                >
+                  {isLoading ? (
+                    <div className="flex flex-col items-center justify-center h-full w-full py-10">
+                      <p className="text-foreground animate-pulse font-medium">
+                        Loading forms...
+                      </p>
+                    </div>
+                  ) : filteredForms.filter((f) => !f.isPublished).length ===
+                    0 ? (
+                    <div className="flex flex-col items-center justify-center h-full w-full py-10">
+                      <img src="ruby-searching.png" alt="" className="w-40" />
+                      <h3 className="text-foreground font-semibold text-xl">
+                        No Draft Forms
+                      </h3>
+                      <p className="text-foreground/50">
+                        You don't have any unpublished forms
+                      </p>
+                    </div>
+                  ) : (
+                    filteredForms
+                      .filter((f) => !f.isPublished)
+                      .map((form) => (
+                        <FormCard
+                          key={form.id}
+                          title={form.title}
+                          description={form.description}
+                          isPublished={form.isPublished}
+                          questionCount={form.questionCount}
+                          date={form.date}
+                          onClick={() => router.push(`/forms/${form.id}/edit`)}
+                        />
+                      ))
+                  )}
+                </div>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
 
         {/* Tabs */}
-        <Tabs defaultValue="all" className="w-full mb-8">
-          <TabsList variant="underline">
-            <TabsTrigger value="all">
-              All <span className="ml-2"> ({filteredForms.length})</span>
-            </TabsTrigger>
-            <TabsTrigger value="published">
-              Published{" "}
-              <span className="ml-2">
-                {" "}
-                ({filteredForms.filter((form) => form.isPublished).length})
-              </span>
-            </TabsTrigger>
-            <TabsTrigger value="not-published">
-              Not Published{" "}
-              <span className="ml-2">
-                {" "}
-                ({filteredForms.filter((form) => !form.isPublished).length})
-              </span>
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="all" className="mt-6">
-            <div className="">
-              <div
-                className={`bg-background grid gap-4 p-4 rounded-[16px] border-2 border-border ${filteredForms.length === 0 || isLoading ? "grid-cols-1" : "grid-cols-2"}`}
-              >
-                {isLoading ? (
-                  <div className="flex flex-col items-center justify-center h-full w-full py-10">
-                    <p className="text-foreground animate-pulse font-medium">
-                      Loading forms...
-                    </p>
-                  </div>
-                ) : filteredForms.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-full w-full py-10">
-                    <img src="ruby-searching.png" alt="" className="w-40" />
-                    <h3 className="text-foreground font-semibold text-xl">
-                      No Forms Yet
-                    </h3>
-                    <p className="text-foreground/50">
-                      Create your first form to get started
-                    </p>
-                  </div>
-                ) : (
-                  filteredForms.map((form) => (
-                    <FormCard
-                      key={form.id}
-                      title={form.title}
-                      description={form.description}
-                      isPublished={form.isPublished}
-                      questionCount={form.questionCount}
-                      date={form.date}
-                      onClick={() => router.push(`/forms/${form.id}/edit`)}
-                    />
-                  ))
-                )}
-              </div>
-            </div>
-          </TabsContent>
-          <TabsContent value="published" className="mt-6">
-            <div className="">
-              <div
-                className={`bg-background grid gap-4 p-4 rounded-[16px] border-2 border-border ${filteredForms.filter((f) => f.isPublished).length === 0 || isLoading ? "grid-cols-1" : "grid-cols-2"}`}
-              >
-                {isLoading ? (
-                  <div className="flex flex-col items-center justify-center h-full w-full py-10">
-                    <p className="text-foreground animate-pulse font-medium">
-                      Loading forms...
-                    </p>
-                  </div>
-                ) : filteredForms.filter((f) => f.isPublished).length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-full w-full py-10">
-                    <img src="ruby-searching.png" alt="" className="w-40" />
-                    <h3 className="text-foreground font-semibold text-xl">
-                      No Published Forms
-                    </h3>
-                    <p className="text-foreground/50">
-                      You haven't published any forms yet
-                    </p>
-                  </div>
-                ) : (
-                  filteredForms
-                    .filter((form) => form.isPublished)
-                    .map((form) => (
-                      <FormCard
-                        key={form.id}
-                        title={form.title}
-                        description={form.description}
-                        isPublished={form.isPublished}
-                        questionCount={form.questionCount}
-                        date={form.date}
-                        onClick={() => router.push(`/forms/${form.id}/edit`)}
-                      />
-                    ))
-                )}
-              </div>
-            </div>
-          </TabsContent>
-          <TabsContent value="not-published" className="mt-6">
-            <div className="">
-              <div
-                className={`bg-background grid gap-4 p-4 rounded-[16px] border-2 border-border ${filteredForms.filter((f) => !f.isPublished).length === 0 || isLoading ? "grid-cols-1" : "grid-cols-2"}`}
-              >
-                {isLoading ? (
-                  <div className="flex flex-col items-center justify-center h-full w-full py-10">
-                    <p className="text-foreground animate-pulse font-medium">
-                      Loading forms...
-                    </p>
-                  </div>
-                ) : filteredForms.filter((f) => !f.isPublished).length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-full w-full py-10">
-                    <img src="ruby-searching.png" alt="" className="w-40" />
-                    <h3 className="text-foreground font-semibold text-xl">
-                      No Draft Forms
-                    </h3>
-                    <p className="text-foreground/50">
-                      You don't have any unpublished forms
-                    </p>
-                  </div>
-                ) : (
-                  filteredForms
-                    .filter((f) => !f.isPublished)
-                    .map((form) => (
-                      <FormCard
-                        key={form.id}
-                        title={form.title}
-                        description={form.description}
-                        isPublished={form.isPublished}
-                        questionCount={form.questionCount}
-                        date={form.date}
-                        onClick={() => router.push(`/forms/${form.id}/edit`)}
-                      />
-                    ))
-                )}
-              </div>
-            </div>
-          </TabsContent>
-        </Tabs>
       </main>
     </div>
   );

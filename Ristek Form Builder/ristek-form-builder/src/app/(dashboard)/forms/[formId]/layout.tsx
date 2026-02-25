@@ -63,7 +63,7 @@ export default function FormLayout({
   return (
     <div className="flex w-full bg-background relative z-20">
       {/* Sidebar */}
-      <div className="fixed hidden lg:flex flex-col w-[320px] shrink-0 border-r border-foreground/10 h-[calc(100vh-97px)] sticky top-[97px] bg-card">
+      <div className=" hidden lg:flex flex-col w-[320px] shrink-0 border-r border-foreground/10 h-vh sticky top-0 bg-card">
         {/* Sidebar Header */}
         <div className="p-8 pb-6 flex items-center gap-4 border-b border-transparent">
           <Link
