@@ -205,7 +205,7 @@ export default function ResponsesPage() {
                       (a: any) => a.questionId === q.id,
                     )?.value;
                     let displayValue = ans;
-                    if (ans && ans.startsWith("[")) {
+                    if (typeof ans === "string" && ans.startsWith("[")) {
                       try {
                         const parsed = JSON.parse(ans);
                         displayValue = Array.isArray(parsed)

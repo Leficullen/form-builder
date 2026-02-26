@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Search, Plus } from "lucide-react";
+import { Search, Plus, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { FormCard } from "@/components/ui/form-card";
@@ -36,6 +36,11 @@ export default function DashboardPage() {
   const [isCreating, setIsCreating] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+
+  // AI Modal States
+  const [isAiModalOpen, setIsAiModalOpen] = useState(false);
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
@@ -100,6 +105,65 @@ export default function DashboardPage() {
     }
   };
 
+  const handleGenerateAI = async () => {
+    if (!aiPrompt.trim()) return;
+    setIsGenerating(true);
+    try {
+      const resp = await fetch("/api/generate-form", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: aiPrompt }),
+      });
+      const aiData = await resp.json();
+      if (!resp.ok) {
+        throw new Error(aiData.message || "Failed to generate AI form");
+      }
+
+      const typeMapping: Record<string, string> = {
+        SHORT_ANSWER: "SHORT ANSWER",
+        PARAGRAPH: "PARAGRAPH",
+        MULTIPLE_CHOICE: "MULTIPLE CHOICE",
+        CHECKBOXES: "CHECKBOXES",
+        DROPDOWN: "DROPDOWN",
+      };
+
+      const finalQuestions = aiData.questions.map((q: any, i: number) => ({
+        id: `new-${Date.now()}-${i}`,
+        title: q.title,
+        type: typeMapping[q.type] || "SHORT ANSWER",
+        required: q.required,
+        options: q.options || [],
+      }));
+
+      const payload = {
+        title: aiData.title,
+        description: aiData.description,
+        questions: finalQuestions,
+      };
+
+      const data = await fetchApi("/forms", {
+        method: "POST",
+        body: JSON.stringify({
+          title: payload.title,
+          description: payload.description,
+        }),
+      });
+
+      if (data && data.form) {
+        await fetchApi(`/forms/${data.form.id}`, {
+          method: "PUT",
+          body: JSON.stringify(payload),
+        });
+        toast.success("Form generated successfully!");
+        router.push(`/forms/${data.form.id}/edit`);
+      }
+    } catch (error: any) {
+      console.error("AI Generation failed:", error);
+      toast.error(error.message || "Failed to generate form");
+      setIsGenerating(false);
+    }
+  };
+
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
@@ -122,7 +186,10 @@ export default function DashboardPage() {
           </h1>
 
           <div className="flex items-center space-x-4">
-            <Button className="bg-[#D946EF] hover:bg-[#D946EF]/90 text-white  rounded-xl h-12 shadow-md transition-all border-none">
+            <Button
+              className="bg-[#D946EF] hover:bg-[#D946EF]/90 text-white  rounded-xl h-12 shadow-md transition-all border-none"
+              onClick={() => setIsAiModalOpen(true)}
+            >
               <img src="sparkle.png" alt="" className="w-5" />
               Generate With AI
             </Button>
@@ -217,7 +284,7 @@ export default function DashboardPage() {
             <TabsContent value="published" className="mt-6">
               <div className="">
                 <div
-                  className={`bg-background grid gap-4 p-4 rounded-[16px] border-2 border-border ${filteredForms.filter((f) => f.isPublished).length === 0 || isLoading ? "grid-cols-1" : "grid-cols-2"}`}
+                  className={`grid gap-4 rounded-2xl ${filteredForms.filter((f) => f.isPublished).length === 0 || isLoading ? "grid-cols-1" : "grid-cols-2"}`}
                 >
                   {isLoading ? (
                     <div className="flex flex-col items-center justify-center h-full w-full py-10">
@@ -258,7 +325,7 @@ export default function DashboardPage() {
             <TabsContent value="not-published" className="mt-6">
               <div className="">
                 <div
-                  className={`bg-background grid gap-4 p-4 rounded-[16px] border-2 border-border ${filteredForms.filter((f) => !f.isPublished).length === 0 || isLoading ? "grid-cols-1" : "grid-cols-2"}`}
+                  className={`grid gap-4 rounded-2xl ${filteredForms.filter((f) => !f.isPublished).length === 0 || isLoading ? "grid-cols-1" : "grid-cols-2"}`}
                 >
                   {isLoading ? (
                     <div className="flex flex-col items-center justify-center h-full w-full py-10">
@@ -301,6 +368,58 @@ export default function DashboardPage() {
 
         {/* Tabs */}
       </main>
+
+      {/* AI Modals */}
+      {isAiModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-card w-full max-w-md rounded-2xl p-6 shadow-xl border border-border flex flex-col gap-4 relative">
+            <button
+              className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+              onClick={() => setIsAiModalOpen(false)}
+              disabled={isGenerating}
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="flex items-center gap-2 mb-2">
+              <img src="sparkle.png" alt="" className="w-6" />
+              <h2 className="text-xl font-bold text-foreground">
+                Generate with AI
+              </h2>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <p className="text-sm text-foreground/70">
+                Describe the form you want to create, and our AI will build it
+                for you instantly. (e.g., "Buatkan form pendaftaran futsal")
+              </p>
+
+              <textarea
+                className="w-full text-foreground bg-background rounded-xl p-3 border border-border focus:outline-none focus:ring-2 focus:ring-primary/40 min-h-30 resize-none"
+                placeholder="Type your prompt here..."
+                value={aiPrompt}
+                onChange={(e) => setAiPrompt(e.target.value)}
+                disabled={isGenerating}
+              />
+
+              <button
+                className="w-full bg-[#D946EF] hover:bg-[#D946EF]/90 text-white font-semibold py-3 flex items-center justify-center gap-2 rounded-xl transition-all disabled:opacity-50"
+                onClick={handleGenerateAI}
+                disabled={isGenerating || !aiPrompt.trim()}
+              >
+                {isGenerating ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  "✨ Generate"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

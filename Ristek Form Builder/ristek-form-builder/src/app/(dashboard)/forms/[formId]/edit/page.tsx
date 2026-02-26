@@ -164,20 +164,29 @@ export default function EditFormPage() {
             alt=""
             className="absolute -right-1 2 w-30 -bottom-3"
           />
-          <div className="pt-6">
-            <input
-              type="text"
+          <div className="pt-6 w-full flex flex-col items-center">
+            <textarea
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => {
+                setTitle(e.target.value);
+                e.target.style.height = "auto";
+                e.target.style.height = e.target.scrollHeight + "px";
+              }}
+              rows={1}
               placeholder="Untitled Form"
-              className="text-white text-2xl  font-bold tracking-tight  rounded-lg px-4 w-full max-w-2xl text-center bg-transparent border-transparent outline-none focus:ring-0 focus:bg-white/10 hover:bg-white/5 transition-colors placeholder:text-white cursor-text whitespace-normal mb-3"
+              className="text-white text-2xl font-bold tracking-tight rounded-lg px-4 py-2 w-full max-w-2xl text-center bg-transparent border-transparent outline-none focus:ring-0 focus:bg-white/10 hover:bg-white/5 transition-colors placeholder:text-white cursor-text resize-none overflow-hidden mb-3"
             />
 
             <textarea
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => {
+                setDescription(e.target.value);
+                e.target.style.height = "auto";
+                e.target.style.height = e.target.scrollHeight + "px";
+              }}
+              rows={1}
               placeholder="Form Description"
-              className="text-white/90 text-xs md:text-sm rounded-lg px-4  w-full max-w-xl text-center bg-transparent border-transparent outline-none focus:ring-0 focus:bg-white/10 hover:bg-white/5 transition-colors placeholder:text-white cursor-text h-fit "
+              className="text-white/90 text-sm rounded-lg px-4 py-2 w-full max-w-xl text-center bg-transparent border-transparent outline-none focus:ring-0 focus:bg-white/10 hover:bg-white/5 transition-colors placeholder:text-white cursor-text resize-none overflow-hidden"
             />
           </div>
         </div>

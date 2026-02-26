@@ -125,7 +125,8 @@ export default function FormLayout({
   return (
     <div className="flex w-full bg-background relative z-20 h-vh">
       {/* Sidebar */}
-      <div className=" hidden lg:flex flex-col w-[320px] shrink-0 border-r border-foreground/10 h-vh sticky top-0 bg-card ">
+      <div className="hidden lg:flex flex-col w-[320px] shrink-0 border-r border-foreground/10 h-vh sticky top-0 bg-card ">
+
         {/* Sidebar Header */}
         <div className="p-8 pb-6 flex items-center gap-4 border-b border-transparent">
           <Link
@@ -158,7 +159,7 @@ export default function FormLayout({
                     : "hover:bg-muted text-foreground"
                 }`}
               >
-                <Icon className="w-[18px] h-[18px]" />
+                <Icon className="w-4.5 h-4.5" />
                 {link.name}
               </Link>
             );
@@ -171,13 +172,13 @@ export default function FormLayout({
             className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all focus:ring-4 focus:ring-primary/20"
             onClick={() => setIsShareModalOpen(true)}
           >
-            <Share2 className="w-[18px] h-[18px]" /> Share
+            <Share2 className="w-4.5 h-4.5" /> Share
           </button>
         </div>
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col bg-background min-h-screen">
+      <div className="flex-col bg-background min-h-screen max-w-4xl mx-auto w-full p-8 gap-5 flex py-16 relative">
         {children}
       </div>
 

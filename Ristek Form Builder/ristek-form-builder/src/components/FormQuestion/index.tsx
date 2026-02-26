@@ -6,6 +6,11 @@ import {
   Cell,
   ResponsiveContainer,
   Tooltip as RechartsTooltip,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
 } from "recharts";
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
@@ -98,12 +103,16 @@ export function FormQuestion({
               {question.required && (
                 <span className="text-[#D20004] font-bold mt-1.5">*</span>
               )}
-              <input
-                className="text-base font-semibold text-foreground bg-transparent border-transparent outline-none focus:ring-0 focus:bg-muted/50 hover:bg-muted/30 transition-colors rounded-md px-2 py-1 -ml-2 flex-1 w-full cursor-text placeholder:text-muted-foreground/40"
+              <textarea
+                className="text-base font-semibold text-foreground bg-transparent border-transparent outline-none focus:ring-0 focus:bg-muted/50 hover:bg-muted/30 transition-colors rounded-md px-2 py-1 -ml-2 flex-1 w-full cursor-text placeholder:text-muted-foreground/40 resize-none overflow-hidden"
                 placeholder="Untitled Question"
-                type="text"
                 value={question.title}
-                onChange={(e) => onTitleChange?.(e.target.value)}
+                rows={1}
+                onChange={(e) => {
+                  onTitleChange?.(e.target.value);
+                  e.target.style.height = "auto";
+                  e.target.style.height = e.target.scrollHeight + "px";
+                }}
               />
             </div>
           ) : (
@@ -153,16 +162,23 @@ export function FormQuestion({
             {isEdit && (
               <Input
                 type="text"
-                disabled
-                placeholder="Short answer text"
-                className="w-full sm:w-1/2 bg-transparent border-t-0 border-x-0 border-b border-foreground/20 rounded-none pb-2 pt-1 px-0 text-sm text-foreground outline-none font-medium placeholder:text-muted-foreground focus-visible:ring-0 shadow-none"
+                value={question.options?.[0] || ""}
+                onChange={(e) => onOptionChange?.(0, e.target.value)}
+                placeholder={
+                  question.type === "PARAGRAPH"
+                    ? "Long answer text"
+                    : "Short answer text"
+                }
+                className="w-full sm:w-1/2 bg-transparent border-t-0 border-x-0 border-b border-foreground/20 rounded-none pb-2 pt-1 px-0 text-sm text-foreground outline-none font-medium placeholder:text-muted-foreground focus-visible:ring-0 shadow-none hover:bg-muted/10 cursor-text"
               />
             )}
             {isPreview && (
               <div className="w-full pb-3">
                 <Input
                   type="text"
-                  placeholder="Enter your answer here..."
+                  placeholder={
+                    question.options?.[0] || "Enter your answer here..."
+                  }
                   className="w-full text-sm"
                 />
               </div>
@@ -389,28 +405,76 @@ export function FormQuestion({
             )}
 
             {isResponse && question.stats && (
-              <div className="flex flex-col gap-5 mt-4">
-                {question.stats.map((stat, i) => (
-                  <div key={i} className="flex flex-col gap-2">
-                    <div className="flex items-center justify-between text-[13px]">
-                      <span className="font-medium text-foreground">
-                        {stat.label}
-                      </span>
-                      <div className="flex items-center gap-4 text-muted-foreground font-medium">
-                        <span>{stat.count}</span>
-                        <span className="w-[45px] text-right">
-                          {stat.percentage}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="w-full h-[10px] bg-muted rounded-full overflow-hidden">
-                      <div
-                        className={`h-full ${stat.color}`}
-                        style={{ width: stat.percentage.replace(",", ".") }}
-                      ></div>
-                    </div>
+              <div
+                className="w-full mt-4"
+                style={{
+                  height: Math.max(150, question.stats.length * 45 + 40),
+                }}
+              >
+                {question.stats.some((s) => s.count > 0) ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={question.stats}
+                      layout="vertical"
+                      margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
+                    >
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        horizontal={false}
+                        opacity={0.3}
+                      />
+                      <XAxis type="number" hide />
+                      <YAxis
+                        dataKey="label"
+                        type="category"
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{
+                          fill: "currentColor",
+                          fontSize: 13,
+                          fontWeight: 500,
+                        }}
+                        width={120}
+                      />
+                      <RechartsTooltip
+                        cursor={{ fill: "var(--muted)", opacity: 0.4 }}
+                        contentStyle={{
+                          borderRadius: "8px",
+                          border: "none",
+                          boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                          padding: "4px 8px",
+                        }}
+                        itemStyle={{
+                          color: "#000",
+                          fontSize: "11px",
+                          fontWeight: 600,
+                        }}
+                      />
+                      <Bar
+                        dataKey="count"
+                        radius={[0, 4, 4, 0]}
+                        barSize={20}
+                        label={{
+                          position: "right",
+                          fill: "currentColor",
+                          fontSize: 13,
+                          fontWeight: 500,
+                        }}
+                      >
+                        {question.stats.map((entry, index) => (
+                          <Cell
+                            key={`cell-${index}`}
+                            fill={entry.hexColor || "#ccc"}
+                          />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="w-full h-full rounded-2xl bg-muted flex items-center justify-center border border-card shadow-sm text-[13px] text-muted-foreground font-medium">
+                    No Data
                   </div>
-                ))}
+                )}
               </div>
             )}
           </div>
