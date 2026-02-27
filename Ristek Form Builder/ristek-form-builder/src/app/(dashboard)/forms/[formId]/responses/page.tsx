@@ -6,6 +6,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { FormQuestion } from "@/components/FormQuestion";
 import { fetchApi } from "@/lib/api";
 import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function ResponsesPage() {
   const params = useParams();
@@ -16,7 +17,6 @@ export default function ResponsesPage() {
   const [submissions, setSubmissions] = useState<any[]>([]);
   const [summaryQuestions, setSummaryQuestions] = useState<any[]>([]);
 
-  // Individual Tab State
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -27,7 +27,6 @@ export default function ResponsesPage() {
           setForm(res.form);
           setSubmissions(res.submissions);
 
-          // Calculate summary for FormQuestion
           const colorsPairs = [
             { bgClass: "bg-[#6be0ff]", hex: "#6be0ff" },
             { bgClass: "bg-[#b1229f]", hex: "#b1229f" },
@@ -168,25 +167,25 @@ export default function ResponsesPage() {
               </div>
             ) : (
               <div className="mt-6 flex flex-col gap-4">
-                <div className="flex items-center justify-between bg-card border rounded-2xl p-4 shadow-sm">
+                <div className="flex items-center justify-between border rounded-2xl p-4 shadow-sm bg-primary">
                   <span className="font-semibold text-sm">
                     Response {currentIndex + 1} of {submissions.length}
                   </span>
                   <div className="flex items-center gap-2">
-                    <button
+                    <Button
                       onClick={handlePrev}
                       disabled={currentIndex === 0}
                       className="p-2 rounded-full hover:bg-muted disabled:opacity-50 transition-colors"
                     >
-                      <ChevronLeft className="w-5 h-5" />
-                    </button>
-                    <button
+                      <ChevronLeft className="w-5 h-5 cursor-pointer text-white" />
+                  </Button>
+                    <Button
                       onClick={handleNext}
                       disabled={currentIndex === submissions.length - 1}
-                      className="p-2 rounded-full hover:bg-muted disabled:opacity-50 transition-colors"
+                      className="p-2 rounded-full hover:bg-muted disabled:opacity-50 transition-colors cursor-pointer"
                     >
-                      <ChevronRight className="w-5 h-5" />
-                    </button>
+                      <ChevronRight className="w-5 h-5 text-white" />
+                    </Button>
                   </div>
                 </div>
 

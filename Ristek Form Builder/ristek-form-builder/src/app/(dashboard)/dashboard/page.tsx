@@ -36,6 +36,7 @@ export default function DashboardPage() {
   const [isCreating, setIsCreating] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [showMore, setShowMore]  = useState(false);
 
   // AI Modal States
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
@@ -45,7 +46,10 @@ export default function DashboardPage() {
   useEffect(() => {
     setIsMounted(true);
     if (!getToken()) {
-      setTimeout(() => toast.error("You are not logged in!"), 0);
+      setTimeout(
+        () => toast.error("You are not logged in!", { id: "not-logged-in" }),
+        0,
+      );
       router.push("/login");
     }
 
@@ -175,6 +179,8 @@ export default function DashboardPage() {
   if (!isMounted || !getToken()) {
     return null;
   }
+
+  
 
   return (
     <div className="flex flex-col flex-1 min-h-screen relative bg-background">

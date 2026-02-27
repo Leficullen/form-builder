@@ -5,6 +5,8 @@ import { useParams, useRouter } from "next/navigation";
 import { fetchApi } from "@/lib/api";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { FormQuestion, QuestionType } from "@/components/FormQuestion";
 
 type Question = {
   id: string;
@@ -48,29 +50,6 @@ export default function PublicFormPage() {
     }
     load();
   }, [shareId]);
-
-  const handleTextChange = (qId: string, val: string) => {
-    setAnswers((prev) => ({ ...prev, [qId]: val }));
-  };
-
-  const handleCheckboxChange = (qId: string, val: string, checked: boolean) => {
-    setAnswers((prev) => {
-      const current = prev[qId] || [];
-      if (checked) {
-        return { ...prev, [qId]: [...current, val] };
-      } else {
-        return { ...prev, [qId]: current.filter((v: string) => v !== val) };
-      }
-    });
-  };
-
-  const handleRadioChange = (qId: string, val: string) => {
-    setAnswers((prev) => ({ ...prev, [qId]: val }));
-  };
-
-  const handleSelectChange = (qId: string, val: string) => {
-    setAnswers((prev) => ({ ...prev, [qId]: val }));
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -132,7 +111,7 @@ export default function PublicFormPage() {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-[#F3E8FF] dark:bg-background pt-16 p-4">
+      <div className="min-h-screen bg-primary dark:bg-background pt-16 p-4">
         <div className="max-w-2xl mx-auto bg-card rounded-xl p-8 shadow-sm border border-border text-center">
           <h1 className="text-3xl font-bold text-foreground mb-4">
             Response submitted!
@@ -146,135 +125,54 @@ export default function PublicFormPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F3E8FF] dark:bg-background py-16 px-4">
+    <div className="min-h-screen bg-hover dark:bg-background py-16 px-4">
       <form
         onSubmit={handleSubmit}
         className="max-w-3xl mx-auto flex flex-col gap-6"
       >
         {/* Form Header */}
-        <div className="bg-card rounded-2xl p-8 border-t-[12px] border-primary shadow-sm">
-          <h1 className="text-4xl font-bold text-foreground mb-4">
-            {form.title}
-          </h1>
-          {form.description && (
-            <p className="text-foreground/80 whitespace-pre-wrap leading-relaxed">
-              {form.description}
-            </p>
-          )}
-          <div className="text-destructive mt-6 text-sm font-medium">
-            * Indicates required question
+        <div className="bg-primary rounded-2xl p-6 text-center flex flex-col items-center justify-center mt-2 relative overflow-hidden">
+          <img
+            src="/banner-pattern-left.png"
+            alt=""
+            className="absolute -left-1 2 w-30 -top-3"
+          />
+          <img
+            src="/banner-pattern-right.png"
+            alt=""
+            className="absolute -right-1 2 w-30 -bottom-3"
+          />
+          <div className="pt-6 w-full flex flex-col items-center">
+            <h1 className="text-white text-2xl font-bold tracking-tight rounded-lg px-4 py-2 w-full max-w-2xl text-center bg-transparent border-transparent outline-none overflow-hidden mb-3">
+              {form.title}
+            </h1>
+            {form.description && (
+              <p className="text-white/90 text-sm rounded-lg px-4 w-full max-w-xl text-center bg-transparent border-transparent outline-none overflow-hidden pb-6 pt-2 -mt-5 whitespace-pre-wrap leading-relaxed">
+                {form.description}
+              </p>
+            )}
           </div>
+        </div>
+        <div className="text-destructive mt-1 text-sm font-medium px-2">
+          * Indicates required question
         </div>
 
         {/* Questions */}
-        {form.questions.map((q, idx) => (
-          <div
+        {form.questions.map((q) => (
+          <FormQuestion
             key={q.id}
-            className="bg-card rounded-2xl p-8 shadow-sm border border-border"
-          >
-            <h2 className="text-lg font-semibold text-foreground mb-4">
-              {idx + 1}. {q.title}
-              {q.required && <span className="text-destructive ml-1">*</span>}
-            </h2>
-
-            {q.type === "SHORT ANSWER" && (
-              <input
-                type="text"
-                required={q.required}
-                className="w-full border-b-2 border-border focus:border-primary bg-transparent py-2 outline-none transition-colors text-foreground"
-                placeholder="Your answer"
-                value={answers[q.id] || ""}
-                onChange={(e) => handleTextChange(q.id, e.target.value)}
-              />
-            )}
-
-            {q.type === "MULTIPLE CHOICE" && (
-              <div className="flex flex-col gap-3">
-                {q.options.map((opt, i) => (
-                  <label
-                    key={i}
-                    className="flex items-center gap-3 cursor-pointer group"
-                  >
-                    <div className="relative flex items-center justify-center">
-                      <input
-                        type="radio"
-                        name={`q-${q.id}`}
-                        value={opt}
-                        required={q.required}
-                        checked={answers[q.id] === opt}
-                        onChange={() => handleRadioChange(q.id, opt)}
-                        className="peer sr-only"
-                      />
-                      <div className="w-5 h-5 rounded-full border-2 border-border peer-checked:border-primary flex items-center justify-center transition-colors">
-                        <div className="w-2.5 h-2.5 rounded-full bg-primary scale-0 peer-checked:scale-100 transition-transform"></div>
-                      </div>
-                    </div>
-                    <span className="text-foreground/90">{opt}</span>
-                  </label>
-                ))}
-              </div>
-            )}
-
-            {q.type === "CHECKBOXES" && (
-              <div className="flex flex-col gap-3">
-                {q.options.map((opt, i) => {
-                  const isChecked = (answers[q.id] || []).includes(opt);
-                  return (
-                    <label
-                      key={i}
-                      className="flex items-center gap-3 cursor-pointer group"
-                    >
-                      <div className="relative flex items-center justify-center">
-                        <input
-                          type="checkbox"
-                          value={opt}
-                          checked={isChecked}
-                          onChange={(e) =>
-                            handleCheckboxChange(q.id, opt, e.target.checked)
-                          }
-                          className="peer sr-only"
-                        />
-                        <div className="w-5 h-5 rounded-[4px] border-2 border-border peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center transition-colors">
-                          <svg
-                            className={`w-3 h-3 text-white ${isChecked ? "opacity-100" : "opacity-0"} transition-opacity`}
-                            viewBox="0 0 14 10"
-                            fill="none"
-                          >
-                            <path
-                              d="M1 5L4.5 8.5L13 1"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </div>
-                      </div>
-                      <span className="text-foreground/90">{opt}</span>
-                    </label>
-                  );
-                })}
-              </div>
-            )}
-
-            {q.type === "DROPDOWN" && (
-              <select
-                required={q.required}
-                className="w-full md:max-w-xs border border-border rounded-xl px-4 py-3 bg-background outline-none focus:ring-2 focus:ring-primary/20 transition-shadow"
-                value={answers[q.id] || ""}
-                onChange={(e) => handleSelectChange(q.id, e.target.value)}
-              >
-                <option value="" disabled>
-                  Choose
-                </option>
-                {q.options.map((opt, i) => (
-                  <option key={i} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
-            )}
-          </div>
+            question={{
+              type: q.type as QuestionType,
+              title: q.title,
+              required: q.required,
+              options: q.options,
+            }}
+            viewState="fill"
+            answer={answers[q.id]}
+            onAnswerChange={(val) => {
+              setAnswers((prev) => ({ ...prev, [q.id]: val }));
+            }}
+          />
         ))}
 
         <div className="flex items-center justify-between mt-4">

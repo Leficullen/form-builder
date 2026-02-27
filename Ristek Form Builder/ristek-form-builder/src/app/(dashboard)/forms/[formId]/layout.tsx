@@ -2,11 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Pencil, Eye, BarChart2, Share2 } from "lucide-react";
+import { ArrowLeft, Pencil, Eye, BarChart2, Share2, CheckCircleIcon, LucideCheckCircle2, CheckCheck, Check, CheckIcon } from "lucide-react";
 import { usePathname, useParams } from "next/navigation";
 import { fetchApi } from "@/lib/api";
 import { toast } from "sonner";
 import { Loader2, Copy, CheckCircle2, RotateCw, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {motion} from "framer-motion";
+
 
 export default function FormLayout({
   children,
@@ -21,6 +24,7 @@ export default function FormLayout({
   const [isPublic, setIsPublic] = useState(false);
   const [shareId, setShareId] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
@@ -44,22 +48,43 @@ export default function FormLayout({
     loadForm();
   }, [formId]);
 
-  const handleShareEnable = async () => {
-    if (status !== "PUBLISHED") {
-      toast.error("Form must be published before you can share it.");
-      return;
-    }
 
+  const handlePublishAndShare = async () => {
     setIsSharing(true);
     try {
+      if (status !== "PUBLISHED") {
+        await fetchApi(`/forms/${formId}`, {
+          method: "PUT",
+          body: JSON.stringify({ status: "PUBLISHED" }),
+        });
+        setStatus("PUBLISHED");
+      }
+
       const resp = await fetchApi(`/forms/${formId}/share/enable`, {
         method: "POST",
       });
       setIsPublic(resp.isPublic);
       setShareId(resp.shareId);
-      toast.success("Sharing enabled");
+      toast.success("Form published and sharing enabled");
     } catch (err: any) {
-      toast.error(err.message || "Failed to enable sharing");
+      toast.error(err.message || "Failed to publish and share form");
+    } finally {
+      setIsSharing(false);
+    }
+  };
+  
+  const handleUnpublish = async () => {
+    setIsSharing(true);
+    try {
+      const resp = await fetchApi(`/forms/${formId}`, {
+        method: "PUT",
+        body: JSON.stringify({ status: "DRAFT" }),
+      });
+      setStatus("DRAFT");
+      toast.success("Form unpublished");
+      setIsPublic(false);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to unpublish form");
     } finally {
       setIsSharing(false);
     }
@@ -99,6 +124,8 @@ export default function FormLayout({
     const link = `${window.location.origin}/f/${shareId}`;
     navigator.clipboard.writeText(link);
     toast.success("Link copied to clipboard");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const navLinks = [
@@ -126,7 +153,6 @@ export default function FormLayout({
     <div className="flex w-full bg-background relative z-20 h-vh">
       {/* Sidebar */}
       <div className="hidden lg:flex flex-col w-[320px] shrink-0 border-r border-foreground/10 h-vh sticky top-0 bg-card ">
-
         {/* Sidebar Header */}
         <div className="p-8 pb-6 flex items-center gap-4 border-b border-transparent">
           <Link
@@ -164,114 +190,112 @@ export default function FormLayout({
               </Link>
             );
           })}
-        </div>
-
-        {/* Sidebar Bottom Button */}
-        <div className="p-6">
-          <button
+          <Button
             className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all focus:ring-4 focus:ring-primary/20"
             onClick={() => setIsShareModalOpen(true)}
           >
             <Share2 className="w-4.5 h-4.5" /> Share
-          </button>
+          </Button>
         </div>
+
+        {/* Sidebar Bottom Button */}
+        <div className="p-6"></div>
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-col bg-background min-h-screen max-w-4xl mx-auto w-full p-8 gap-5 flex py-16 relative">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="flex-col bg-background min-h-screen max-w-4xl mx-auto w-full p-8 gap-5 flex  relative"
+      >
         {children}
-      </div>
+      </motion.div>
 
       {/* Share Modal */}
       {isShareModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="bg-card w-full max-w-md rounded-2xl p-6 shadow-xl border border-border flex flex-col gap-4 relative">
-            <button
-              className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+            <Button
+              className="bg-transparent border-none  hover:bg-hover absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
               onClick={() => setIsShareModalOpen(false)}
             >
               <X className="w-5 h-5" />
-            </button>
+            </Button>
 
-            <h2 className="text-xl font-bold text-foreground mb-2">
-              Share Form
-            </h2>
+            <h2 className="text-xl font-bold text-foreground ">Share Form</h2>
 
-            {status !== "PUBLISHED" ? (
-              <div className="bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 p-4 rounded-xl text-sm mb-4">
-                You must publish this form to share it with others. Go to Edit
-                and change its status to PUBLISHED first.
-              </div>
-            ) : (
-              <div className="flex flex-col gap-5">
-                {!isPublic ? (
-                  <div className="flex flex-col gap-2">
-                    <p className="text-sm text-foreground/70">
-                      Sharing is currently disabled.
-                    </p>
-                    <button
-                      className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-2.5 rounded-xl transition-all flex items-center justify-center"
-                      onClick={handleShareEnable}
+            <div className="flex flex-col gap-5">
+              {!isPublic ? (
+                <div className="flex flex-col gap-3">
+                  <p className="text-sm text-foreground/70">
+                    Publish your form to enable sharing
+                  </p>
+                  <Button
+                    className="w-full bg-primary hover:bg-primary/90 text-white font-semibold  transition-all flex items-center justify-center"
+                    onClick={handlePublishAndShare}
+                    disabled={isSharing}
+                  >
+                    {isSharing ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      "Publish Now "
+                    )}
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-4">
+                  <p className="text-sm text-foreground/70">
+                    Anyone with this link can view and submit the form.
+                  </p>
+
+                  <div className="flex items-center gap-2 border border-primary shadow-sm shadow-primary/50 p-2 rounded-xl bg-muted/50">
+                    <input
+                      className="flex-1 bg-transparent text-sm focus:outline-none text-foreground truncate px-2 "
+                      readOnly
+                      value={`${typeof window !== "undefined" ? window.location.origin : ""}/f/${shareId}`}
+                    />
+                    <Button
+                      className="bg-primary hover:bg-primary/90 text-white p-2 rounded-lg transition-colors "
+                      onClick={copyLink}
+                    >
+                      {copied ? <CheckIcon className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    </Button>
+                  </div>
+
+                  <div className="flex items-center gap-3 mt-2">
+                    <Button
+                      className="flex-1 bg-destructive hover:bg-destructive/90 text-white font-semibold py-2.5 rounded-xl transition-all flex items-center justify-center text-sm"
+                      onClick={handleShareDisable}
                       disabled={isSharing}
                     >
                       {isSharing ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
                       ) : (
-                        "Enable Sharing"
+                        "Disable Link"
                       )}
-                    </button>
+                    </Button>
+
+                    <Button
+                      className="flex-1 border border-border bg-background hover:bg-muted font-semibold py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 text-sm text-foreground"
+                      onClick={handleRegenerate}
+                      disabled={isSharing}
+                    >
+                      {isSharing ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <>
+                          <RotateCw className="w-4 h-4" /> Regenerate
+                        </>
+                      )}
+                    </Button>
                   </div>
-                ) : (
-                  <div className="flex flex-col gap-4">
-                    <p className="text-sm text-foreground/70">
-                      Anyone with this link can view and submit the form.
-                    </p>
-
-                    <div className="flex items-center gap-2 border border-border p-2 rounded-xl bg-muted/50">
-                      <input
-                        className="flex-1 bg-transparent text-sm focus:outline-none text-foreground truncate px-2"
-                        readOnly
-                        value={`${typeof window !== "undefined" ? window.location.origin : ""}/f/${shareId}`}
-                      />
-                      <button
-                        className="bg-primary hover:bg-primary/90 text-white p-2 rounded-lg transition-colors"
-                        onClick={copyLink}
-                      >
-                        <Copy className="w-4 h-4" />
-                      </button>
-                    </div>
-
-                    <div className="flex items-center gap-3 mt-2">
-                      <button
-                        className="flex-1 bg-destructive hover:bg-destructive/90 text-white font-semibold py-2.5 rounded-xl transition-all flex items-center justify-center text-sm"
-                        onClick={handleShareDisable}
-                        disabled={isSharing}
-                      >
-                        {isSharing ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : (
-                          "Disable Link"
-                        )}
-                      </button>
-
-                      <button
-                        className="flex-1 border border-border bg-background hover:bg-muted font-semibold py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 text-sm text-foreground"
-                        onClick={handleRegenerate}
-                        disabled={isSharing}
-                      >
-                        {isSharing ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : (
-                          <>
-                            <RotateCw className="w-4 h-4" /> Regenerate
-                          </>
-                        )}
-                      </button>
-                    </div>
+                  <div className="w-full">
+                    <Button className="w-full" onClick={handleUnpublish}>Set to Draft</Button>
                   </div>
-                )}
-              </div>
-            )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

@@ -32,7 +32,7 @@ export type QuestionType =
   | "DROPDOWN"
   | "SHORT TEXT";
 
-export type ViewState = "edit" | "preview" | "response";
+export type ViewState = "edit" | "preview" | "response" | "fill";
 
 // Data structures for response stats
 export interface ResponseStat {
@@ -58,6 +58,10 @@ interface FormQuestionProps {
   question: QuestionData;
   viewState: ViewState;
 
+  // Callbacks for fill mode
+  answer?: any;
+  onAnswerChange?: (newAnswer: any) => void;
+
   // Callbacks for edit mode
   onTitleChange?: (newTitle: string) => void;
   onTypeChange?: (newType: QuestionType) => void;
@@ -71,6 +75,8 @@ interface FormQuestionProps {
 export function FormQuestion({
   question,
   viewState,
+  answer,
+  onAnswerChange,
   onTitleChange,
   onTypeChange,
   onRequiredChange,
@@ -80,7 +86,7 @@ export function FormQuestion({
   onRemoveOption,
 }: FormQuestionProps) {
   const isEdit = viewState === "edit";
-  const isPreview = viewState === "preview";
+  const isPreview = viewState === "preview" || viewState === "fill";
   const isResponse = viewState === "response";
 
   // Shared Type Labels across Preview and Response
@@ -95,11 +101,11 @@ export function FormQuestion({
   return (
     <div className="bg-card border border-foreground/10 rounded-[20px] p-7 shadow-[0_2px_8px_-4px_rgba(0,0,0,0.05)] flex flex-col gap-3">
       {/* Header section*/}
-      <div className="flex flex-col md:flex-row justify-between md:items-start gap-4">
+      <div className="flex flex-col md:flex-row justify-between md:items-start gap-4 w-full">
         {/* Title Area */}
-        <div className="flex items-start flex-wrap flex-1 gap-1 w-fit">
+        <div className="flex items-start  gap-1 w-full">
           {isEdit ? (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-full">
               {question.required && (
                 <span className="text-[#D20004] font-bold mt-1.5">*</span>
               )}
@@ -128,7 +134,6 @@ export function FormQuestion({
           )}
         </div>
 
-        {/* Type selector (Edit) or Label (Preview/Response) */}
         {isEdit ? (
           <div className="relative shrink-0 w-[200px] md:w-[180px]">
             <Select
@@ -152,8 +157,7 @@ export function FormQuestion({
         )}
       </div>
 
-      {/* Content Area Based on State and Question Type */}
-      <div className={`pl-0.5 ${isPreview ? "pb-2" : ""}`}>
+      <div className={`pl-0.5 w-full${isPreview ? "pb-2" : ""}`}>
         {/* SHORT ANSWER / PARAGRAPH */}
         {(question.type === "SHORT ANSWER" ||
           question.type === "SHORT TEXT" ||
@@ -169,7 +173,7 @@ export function FormQuestion({
                     ? "Long answer text"
                     : "Short answer text"
                 }
-                className="w-full sm:w-1/2 bg-transparent border-t-0 border-x-0 border-b border-foreground/20 rounded-none pb-2 pt-1 px-0 text-sm text-foreground outline-none font-medium placeholder:text-muted-foreground focus-visible:ring-0 shadow-none hover:bg-muted/10 cursor-text"
+                className=" sm:w-1/2 bg-transparent border-t-0 border-x-0 border-b border-foreground/20 rounded-none pb-2 pt-1 px-0 text-sm text-muted-foreground outline-none font-medium placeholder:text-muted-foreground focus-visible:ring-0 shadow-none hover:bg-muted/10 cursor-text w-full"
               />
             )}
             {isPreview && (
@@ -179,7 +183,18 @@ export function FormQuestion({
                   placeholder={
                     question.options?.[0] || "Enter your answer here..."
                   }
-                  className="w-full text-sm"
+                  className={
+                    viewState === "fill"
+                      ? "w-full text-sm text-foreground"
+                      : "w-full text-sm text-foreground/50 "
+                  }
+                  value={viewState === "fill" ? answer || "" : undefined}
+                  onChange={(e) => {
+                    if (viewState === "fill" && onAnswerChange) {
+                      onAnswerChange(e.target.value);
+                    }
+                  }}
+                  required={viewState === "fill" ? question.required : false}
                 />
               </div>
             )}
@@ -212,7 +227,7 @@ export function FormQuestion({
                       className="opacity-100 border-foreground/30"
                     />
                     <div className="w-full">
-                      <input
+                      <Input
                         type="text"
                         value={opt}
                         onChange={(e) => {
@@ -237,6 +252,13 @@ export function FormQuestion({
               <RadioGroup
                 name={`question-${question.title}`}
                 className="gap-5 mt-2"
+                value={viewState === "fill" ? answer : undefined}
+                onValueChange={(val) => {
+                  if (viewState === "fill" && onAnswerChange) {
+                    onAnswerChange(val);
+                  }
+                }}
+                required={viewState === "fill" ? question.required : false}
               >
                 {question.options?.map((opt, i) => (
                   <div key={i} className="flex items-center gap-3 w-full">
@@ -353,7 +375,7 @@ export function FormQuestion({
                       className="opacity-100 border-foreground/30 shadow-none mt-0.5"
                     />
                     <div className="w-full">
-                      <input
+                      <Input
                         type="text"
                         value={opt}
                         onChange={(e) => {
@@ -376,17 +398,36 @@ export function FormQuestion({
               </div>
             ) : isPreview ? (
               <div className="flex flex-col gap-5 mt-2">
-                {question.options?.map((opt, i) => (
-                  <div key={i} className="flex items-center gap-3 w-full">
-                    <Checkbox id={`q-${question.title}-${i}`} />
-                    <Label
-                      htmlFor={`q-${question.title}-${i}`}
-                      className="text-[13px] font-medium text-foreground cursor-pointer"
-                    >
-                      {opt}
-                    </Label>
-                  </div>
-                ))}
+                {question.options?.map((opt, i) => {
+                  const isChecked =
+                    viewState === "fill" ? (answer || []).includes(opt) : false;
+                  return (
+                    <div key={i} className="flex items-center gap-3 w-full">
+                      <Checkbox
+                        id={`q-${question.title}-${i}`}
+                        checked={isChecked}
+                        onCheckedChange={(checked) => {
+                          if (viewState === "fill" && onAnswerChange) {
+                            const current = answer || [];
+                            if (checked) {
+                              onAnswerChange([...current, opt]);
+                            } else {
+                              onAnswerChange(
+                                current.filter((v: string) => v !== opt),
+                              );
+                            }
+                          }
+                        }}
+                      />
+                      <Label
+                        htmlFor={`q-${question.title}-${i}`}
+                        className="text-[13px] font-medium text-foreground cursor-pointer"
+                      >
+                        {opt}
+                      </Label>
+                    </div>
+                  );
+                })}
               </div>
             ) : null}
 
@@ -490,7 +531,7 @@ export function FormQuestion({
                     {i + 1}.
                   </span>
                   <div className="w-full">
-                    <input
+                    <Input
                       type="text"
                       value={opt}
                       onChange={(e) => {
@@ -527,7 +568,15 @@ export function FormQuestion({
 
             {isPreview && (
               <div className="w-full sm:w-1/2 md:w-[220px] mt-2">
-                <Select>
+                <Select
+                  value={viewState === "fill" ? answer : undefined}
+                  onValueChange={(val) => {
+                    if (viewState === "fill" && onAnswerChange) {
+                      onAnswerChange(val);
+                    }
+                  }}
+                  required={viewState === "fill" ? question.required : false}
+                >
                   <SelectTrigger className="h-11">
                     <SelectValue placeholder="Click here to select" />
                   </SelectTrigger>
@@ -617,7 +666,7 @@ export function FormQuestion({
 
       {/* Edit Mode Footer */}
       {isEdit && (
-        <div className="flex items-center justify-between pt-4 mt-2 border-t-2 border-foreground/70">
+        <div className="flex items-center justify-between  border-foreground/70">
           <div className="flex items-center gap-3 pl-2">
             <Checkbox
               id={`required-${question.title}`}

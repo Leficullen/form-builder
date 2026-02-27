@@ -164,7 +164,7 @@ export default function EditFormPage() {
             alt=""
             className="absolute -right-1 2 w-30 -bottom-3"
           />
-          <div className="pt-6 w-full flex flex-col items-center">
+          <div className="pt-6 w-full flex flex-col items-center ">
             <textarea
               value={title}
               onChange={(e) => {
@@ -186,7 +186,7 @@ export default function EditFormPage() {
               }}
               rows={1}
               placeholder="Form Description"
-              className="text-white/90 text-sm rounded-lg px-4 py-2 w-full max-w-xl text-center bg-transparent border-transparent outline-none focus:ring-0 focus:bg-white/10 hover:bg-white/5 transition-colors placeholder:text-white cursor-text resize-none overflow-hidden"
+              className="text-white/90 text-sm rounded-lg px-4 pt-2 pb-6 w-full max-w-xl text-center bg-transparent border-transparent outline-none focus:ring-0 focus:bg-white/10 hover:bg-white/5 transition-colors placeholder:text-white cursor-text resize-none overflow-hidden -mt-5"
             />
           </div>
         </div>
@@ -271,7 +271,7 @@ export default function EditFormPage() {
             className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all focus:ring-4 focus:ring-primary/20"
             onClick={handleAddQuestion}
           >
-            <Plus className="w-[18px] h-[18px]" /> Add Question
+            <Plus className="w-4.5 h-4.5" /> Add Question
           </button>
         </div>
       </div>

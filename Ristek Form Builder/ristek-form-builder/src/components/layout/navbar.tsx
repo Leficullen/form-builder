@@ -39,7 +39,9 @@ export function Navbar() {
 
   return (
     <header className="fixed top-0 z-50 flex w-full items-center justify-between border-b border-foreground/10 px-8 py-2 transition-colors duration-200 bg-background/70 backdrop-blur-md">
-      <div className="flex items-center">
+      <Link href="/"
+        className="flex items-center w-fit cursor-pointer"
+      >
         <img
           src="/login-register-assets/logo-with-text.png"
           alt="Ristek Fasilkom UI Form Builder"
@@ -50,7 +52,7 @@ export function Navbar() {
           alt="Ristek Fasilkom UI Form Builder"
           className="h-16 w-auto dark:block hidden"
         />
-      </div>
+      </Link>
 
       <div className="flex items-center space-x-10">
         <ModeToggle />

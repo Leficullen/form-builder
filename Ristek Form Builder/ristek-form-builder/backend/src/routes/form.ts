@@ -138,7 +138,6 @@ router.put("/:id", requireAuth as any, async (req: any, res, next) => {
       }
     }
 
-    // Use a top level transaction to ensure the questions logic reliably completes without partial deletions
     const finalForm = await prisma.$transaction(async (tx: any) => {
       const updated = await tx.form.update({
         where: { id: req.params.id },
@@ -153,7 +152,7 @@ router.put("/:id", requireAuth as any, async (req: any, res, next) => {
         const keepIds: string[] = [];
 
         for (const q of body.questions) {
-          const processedOptions = q.options ? q.options.filter(Boolean) : []; // ensure clean options string array
+          const processedOptions = q.options ? q.options.filter(Boolean) : []; 
 
           if (q.id && !q.id.startsWith("new-")) {
             const updatedQ = await tx.question.upsert({
@@ -187,7 +186,6 @@ router.put("/:id", requireAuth as any, async (req: any, res, next) => {
           }
         }
 
-        // Delete any questions not explicitly kept in the latest update
         await tx.question.deleteMany({
           where: {
             formId: updated.id,
@@ -196,7 +194,6 @@ router.put("/:id", requireAuth as any, async (req: any, res, next) => {
         });
       }
 
-      // Re-fetch populated object representing full state
       return await tx.form.findUnique({
         where: { id: updated.id },
         include: { questions: { orderBy: { createdAt: "asc" } } },
