@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import { ArrowLeft } from "lucide-react";
+import { RiArrowLeftLine as ArrowLeft } from "@remixicon/react";
 
 export default function AuthLayout({
   children,
@@ -12,7 +12,10 @@ export default function AuthLayout({
       {/* Left side */}
       <div className="hidden md:block bg-linear-to-b from-primary-dark to-primary relative">
         <div className="ml-[2%] mt-[3%]">
-          <Link href="/" className="font-semibold text-white flex items-center gap-2 hover:bg-foreground/20 w-fit px-3 rounded-full transition-all py-1">
+          <Link
+            href="/"
+            className="font-semibold text-white flex items-center gap-2 hover:bg-foreground/20 w-fit px-3 rounded-full transition-all py-1"
+          >
             <ArrowLeft className="w-4.5 h-4.5" />
             Back to home
           </Link>

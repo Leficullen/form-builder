@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { RadioGroup as RadioGroupPrimitive } from "radix-ui";
-import { CircleIcon } from "lucide-react";
+import { RiRecordCircleLine as CircleIcon } from "@remixicon/react";
 
 import { cn } from "@/lib/utils";
 

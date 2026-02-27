@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { fetchApi } from "@/lib/api";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import { RiLoader4Line as Loader2 } from "@remixicon/react";
 import { Button } from "@/components/ui/button";
 import { FormQuestion, QuestionType } from "@/components/FormQuestion";
 

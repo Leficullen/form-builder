@@ -30,13 +30,13 @@ export default function Home() {
       </div>
       {/* Decorative background element */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-hover/30 blur-[120px] rounded-full -z-10 animate-pulse"></div>
-      <div className="inline-block px-4 py-1.5 mb-4 rounded-full bg-hover text-primary text-sm font-semibold tracking-wide uppercase">
+      <div className="inline-block px-4 py-1.5 mb-4 rounded-full bg-[#C424A3]/20 text-[#C424A3] text-sm font-semibold tracking-wide uppercase">
         Developed by Leficullen
       </div>
 
       <div className="max-w-4xl text-center space-y-8">
         <div className="space-y-4">
-          <h1 className="text-6xl text-primary font-bold text-foreground">
+          <h1 className="text-6xl text-primary font-bold">
             BISMILLAH RISTEK <br />
           </h1>
           <h2 className="text-primary text-6xl font-bold">
@@ -50,8 +50,6 @@ export default function Home() {
         </p>
 
         <div className="grid md:grid-cols-2 grid-cols-1 items-center justify-center gap-4 pt-4">
-    
-
           <Button
             variant="default"
             className="w-full sm:w-auto  transition-all shadow-xl shadow-primary/25 transform hover:-translate-y-1"

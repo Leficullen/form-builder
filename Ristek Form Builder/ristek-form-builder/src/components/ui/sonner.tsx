@@ -1,12 +1,12 @@
 "use client";
 
 import {
-  CircleCheckIcon,
-  InfoIcon,
-  Loader2Icon,
-  OctagonXIcon,
-  TriangleAlertIcon,
-} from "lucide-react";
+  RiCheckboxCircleFill as CircleCheckIcon,
+  RiInformationFill as InfoIcon,
+  RiLoader4Line as Loader2Icon,
+  RiCloseCircleFill as OctagonXIcon,
+  RiAlertFill as TriangleAlertIcon,
+} from "@remixicon/react";
 import { useTheme } from "next-themes";
 import { Toaster as Sonner, type ToasterProps } from "sonner";
 
@@ -39,7 +39,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
           "--error-text": "white",
           "--border-radius": "var(--radius)",
           "--width": "420px",
-          "--height":"100px"
+          "--height": "100px",
         } as React.CSSProperties
       }
       {...props}

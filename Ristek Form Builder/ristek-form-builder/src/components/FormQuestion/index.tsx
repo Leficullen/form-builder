@@ -1,5 +1,5 @@
 import React from "react";
-import { Trash2, X } from "lucide-react";
+import { RiDeleteBinLine as Trash2, RiCloseLine as X } from "@remixicon/react";
 import {
   PieChart,
   Pie,

@@ -2,7 +2,11 @@
 
 import * as React from "react";
 import { Select as SelectPrimitive } from "radix-ui";
-import { Check, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  RiCheckLine as Check,
+  RiArrowDownSLine as ChevronDown,
+  RiArrowUpSLine as ChevronUp,
+} from "@remixicon/react";
 
 import { cn } from "@/lib/utils";
 

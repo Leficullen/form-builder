@@ -130,18 +130,23 @@ function TabsTrigger({
 
 function TabsContent({
   className,
+  value,
   ...props
 }: React.ComponentProps<typeof TabsPrimitive.Content>) {
+  const { activeTab } = React.useContext(TabsContext);
+  const isActive = activeTab === value;
+
   return (
     <TabsPrimitive.Content
       data-slot="tabs-content"
       className={cn("flex-1 outline-none", className)}
+      value={value}
       asChild
       {...props}
     >
       <motion.div
         initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
         {props.children}

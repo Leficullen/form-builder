@@ -1,7 +1,11 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Plus, CheckCircle2, Loader2 } from "lucide-react";
+import {
+  RiAddLine as Plus,
+  RiCheckboxCircleLine as CheckCircle2,
+  RiLoader4Line as Loader2,
+} from "@remixicon/react";
 import { useParams } from "next/navigation";
 import { FormQuestion } from "@/components/FormQuestion";
 import { fetchApi } from "@/lib/api";
@@ -134,9 +138,9 @@ export default function EditFormPage() {
 
   return (
     <>
-      <div className="max-w-4xl mx-auto w-full p-8 flex flex-col gap-5 flex-1 pb-16 relative">
+      <div className="w-full flex flex-col gap-4 md:gap-5 flex-1 pb-16 relative pt-4 md:pt-0">
         {/* Save Status Indicator */}
-        <div className="absolute top-2 right-8 flex items-center justify-end text-xs font-medium text-muted-foreground/80">
+        <div className="absolute top-0 md:top-2 right-0 md:right-8 flex items-center justify-end text-xs font-medium text-muted-foreground/80">
           {saveStatus === "saving" && (
             <span className="flex items-center gap-1.5">
               <Loader2 className="w-3.5 h-3.5 animate-spin" /> Saving changes...
@@ -153,18 +157,18 @@ export default function EditFormPage() {
         </div>
 
         {/* Banner */}
-        <div className="bg-primary rounded-2xl p-6 text-center flex flex-col items-center justify-center mt-2 relative overflow-hidden">
+        <div className="bg-primary rounded-2xl p-4 md:p-6 text-center flex flex-col items-center justify-center mt-6 md:mt-2 relative overflow-hidden">
           <img
             src="/banner-pattern-left.png"
             alt=""
-            className="absolute -left-1 2 w-30 -top-3"
+            className="absolute -left-1 md:-left-1 2 w-20 md:w-30 -top-2 md:-top-3"
           />
           <img
             src="/banner-pattern-right.png"
             alt=""
-            className="absolute -right-1 2 w-30 -bottom-3"
+            className="absolute -right-1 md:-right-1 2 w-20 md:w-30 -bottom-2 md:-bottom-3"
           />
-          <div className="pt-6 w-full flex flex-col items-center ">
+          <div className="pt-4 md:pt-6 w-full flex flex-col items-center z-10">
             <textarea
               value={title}
               onChange={(e) => {
@@ -174,7 +178,7 @@ export default function EditFormPage() {
               }}
               rows={1}
               placeholder="Untitled Form"
-              className="text-white text-2xl font-bold tracking-tight rounded-lg px-4 py-2 w-full max-w-2xl text-center bg-transparent border-transparent outline-none focus:ring-0 focus:bg-white/10 hover:bg-white/5 transition-colors placeholder:text-white cursor-text resize-none overflow-hidden mb-3"
+              className="text-white text-xl md:text-2xl font-bold tracking-tight rounded-lg px-2 md:px-4 py-2 w-full max-w-2xl text-center bg-transparent border-transparent outline-none focus:ring-0 focus:bg-white/10 hover:bg-white/5 transition-colors placeholder:text-white cursor-text resize-none overflow-hidden mb-2 md:mb-3"
             />
 
             <textarea
@@ -186,7 +190,7 @@ export default function EditFormPage() {
               }}
               rows={1}
               placeholder="Form Description"
-              className="text-white/90 text-sm rounded-lg px-4 pt-2 pb-6 w-full max-w-xl text-center bg-transparent border-transparent outline-none focus:ring-0 focus:bg-white/10 hover:bg-white/5 transition-colors placeholder:text-white cursor-text resize-none overflow-hidden -mt-5"
+              className="text-white/90 text-xs md:text-sm rounded-lg px-2 md:px-4 pt-2 pb-4 md:pb-6 w-full max-w-xl text-center bg-transparent border-transparent outline-none focus:ring-0 focus:bg-white/10 hover:bg-white/5 transition-colors placeholder:text-white cursor-text resize-none overflow-hidden -mt-2 md:-mt-5"
             />
           </div>
         </div>

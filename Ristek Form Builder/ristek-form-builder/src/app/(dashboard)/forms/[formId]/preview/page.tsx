@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { FormQuestion } from "@/components/FormQuestion";
 import { useEffect, useState } from "react";
 import { fetchApi } from "@/lib/api";
-import { Loader2 } from "lucide-react";
+import { RiLoader4Line as Loader2 } from "@remixicon/react";
 
 export default function PreviewFormPage() {
   const params = useParams();

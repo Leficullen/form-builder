@@ -5,7 +5,11 @@ import { useParams } from "next/navigation";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { FormQuestion } from "@/components/FormQuestion";
 import { fetchApi } from "@/lib/api";
-import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  RiLoader4Line as Loader2,
+  RiArrowLeftSLine as ChevronLeft,
+  RiArrowRightSLine as ChevronRight,
+} from "@remixicon/react";
 import { Button } from "@/components/ui/button";
 
 export default function ResponsesPage() {
@@ -123,7 +127,7 @@ export default function ResponsesPage() {
   };
 
   return (
-    <>
+    <div className="w-full flex flex-col gap-5 pb-16 pt-4 md:pt-0">
       {/* Total Responses Banner */}
       <div className="w-full rounded-[20px] bg-gradient-to-r from-[#b1229f] to-[#e446ab] p-6 text-white shadow-sm flex flex-col shrink-0">
         <span className="text-sm font-semibold mb-2">Total Responses</span>
@@ -168,21 +172,21 @@ export default function ResponsesPage() {
             ) : (
               <div className="mt-6 flex flex-col gap-4">
                 <div className="flex items-center justify-between border rounded-2xl p-4 shadow-sm bg-primary">
-                  <span className="font-semibold text-sm">
+                  <span className="font-semibold text-sm text-white">
                     Response {currentIndex + 1} of {submissions.length}
                   </span>
                   <div className="flex items-center gap-2">
                     <Button
                       onClick={handlePrev}
                       disabled={currentIndex === 0}
-                      className="p-2 rounded-full hover:bg-muted disabled:opacity-50 transition-colors"
+                      className="p-2 rounded-full hover:bg-background/20 disabled:opacity-50 transition-colors"
                     >
                       <ChevronLeft className="w-5 h-5 cursor-pointer text-white" />
-                  </Button>
+                    </Button>
                     <Button
                       onClick={handleNext}
                       disabled={currentIndex === submissions.length - 1}
-                      className="p-2 rounded-full hover:bg-muted disabled:opacity-50 transition-colors cursor-pointer"
+                      className="p-2 rounded-full hover:bg-background/20 disabled:opacity-50 transition-colors cursor-pointer"
                     >
                       <ChevronRight className="w-5 h-5 text-white" />
                     </Button>
@@ -234,6 +238,6 @@ export default function ResponsesPage() {
           </TabsContent>
         </Tabs>
       </div>
-    </>
+    </div>
   );
 }

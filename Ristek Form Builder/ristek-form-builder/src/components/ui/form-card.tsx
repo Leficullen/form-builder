@@ -1,12 +1,9 @@
 import React from "react";
-import { Trash2, ListTodo } from "lucide-react";
+import {
+  RiDeleteBinLine as Trash2,
+  RiListCheck as ListTodo,
+} from "@remixicon/react";
 import { cn } from "@/lib/utils";
-
-const handleDelete = () => {
-
-  
-}
-
 
 interface FormCardProps {
   title: string;
@@ -14,7 +11,7 @@ interface FormCardProps {
   description: string;
   questionCount: number;
   responseCount: number;
-  date: string;
+  date: string;   
   className?: string;
   onDelete?: (e: React.MouseEvent) => void;
   onClick?: () => void;
@@ -50,7 +47,14 @@ export function FormCard({
             </h3>
           </div>
           {/* Delete button */}
-          <button className="rounded-full hover:text-destructive transition-colors p-1 -mr-2">
+          <button
+            type="button"
+            className="rounded-full hover:text-destructive transition-colors p-1 -mr-2"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete?.(e);
+            }}
+          >
             <Trash2 className="w-5 h-5 text-white hover:text-red-600 cursor-pointer transition-all duration-100 ease-in-out" />
           </button>
         </div>

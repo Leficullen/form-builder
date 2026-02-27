@@ -2,14 +2,30 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Pencil, Eye, BarChart2, Share2, CheckCircleIcon, LucideCheckCircle2, CheckCheck, Check, CheckIcon } from "lucide-react";
+import {
+  RiArrowLeftLine as ArrowLeft,
+  RiPencilLine as Pencil,
+  RiEyeLine as Eye,
+  RiBarChartBoxLine as BarChart2,
+  RiShareForwardLine as Share2,
+  RiCheckLine as CheckCircleIcon,
+  RiCheckboxCircleLine as LucideCheckCircle2,
+  RiCheckDoubleLine as CheckCheck,
+  RiCheckLine as Check,
+  RiCheckLine as CheckIcon,
+} from "@remixicon/react";
 import { usePathname, useParams } from "next/navigation";
 import { fetchApi } from "@/lib/api";
 import { toast } from "sonner";
-import { Loader2, Copy, CheckCircle2, RotateCw, X } from "lucide-react";
+import {
+  RiLoader4Line as Loader2,
+  RiFileCopyLine as Copy,
+  RiCheckboxCircleLine as CheckCircle2,
+  RiRefreshLine as RotateCw,
+  RiCloseLine as X,
+} from "@remixicon/react";
 import { Button } from "@/components/ui/button";
-import {motion} from "framer-motion";
-
+import { motion } from "framer-motion";
 
 export default function FormLayout({
   children,
@@ -48,7 +64,6 @@ export default function FormLayout({
     loadForm();
   }, [formId]);
 
-
   const handlePublishAndShare = async () => {
     setIsSharing(true);
     try {
@@ -72,7 +87,7 @@ export default function FormLayout({
       setIsSharing(false);
     }
   };
-  
+
   const handleUnpublish = async () => {
     setIsSharing(true);
     try {
@@ -150,11 +165,11 @@ export default function FormLayout({
   ];
 
   return (
-    <div className="flex w-full bg-background relative z-20 h-vh">
-      {/* Sidebar */}
-      <div className="hidden lg:flex flex-col w-[320px] shrink-0 border-r border-foreground/10 h-vh sticky top-0 bg-card ">
+    <div className="flex flex-col md:flex-row w-full bg-background relative z-20 min-h-screen">
+      {/* Sidebar / Topnav */}
+      <div className="flex flex-col md:flex-col w-full md:w-[250px] lg:w-[320px] shrink-0 border-b md:border-b-0 md:border-r border-foreground/10 md:h-screen md:sticky top-0 bg-card z-30">
         {/* Sidebar Header */}
-        <div className="p-8 pb-6 flex items-center gap-4 border-b border-transparent">
+        <div className="p-4 md:p-8 md:pb-6 flex items-center gap-4 border-b md:border-transparent shrink-0">
           <Link
             href="/dashboard"
             className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0 hover:bg-primary/90 transition-colors shadow-sm"
@@ -172,29 +187,30 @@ export default function FormLayout({
         </div>
 
         {/* Navigation Links */}
-        <div className="px-6 flex flex-col gap-2 flex-1 pt-2">
+        <div className="px-4 md:px-6 flex flex-row md:flex-col gap-2 md:flex-1 pt-3 md:pt-2 pb-3 md:pb-0 overflow-x-auto whitespace-nowrap items-center md:items-stretch scrollbar-hide">
           {navLinks.map((link) => {
             const Icon = link.icon;
             return (
               <Link
                 key={link.name}
                 href={link.href}
-                className={`flex items-center gap-3 w-full px-5 py-3 rounded-xl font-semibold text-sm transition-colors cursor-pointer ${
+                className={`flex items-center gap-2 md:gap-3 w-auto md:w-full px-4 md:px-5 py-2 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-colors cursor-pointer shrink-0 ${
                   link.active
                     ? "bg-hover dark:bg-primary/20 text-primary dark:text-[#b19df5]"
                     : "hover:bg-muted text-foreground"
                 }`}
               >
-                <Icon className="w-4.5 h-4.5" />
+                <Icon className="w-4 h-4 md:w-4.5 md:h-4.5" />
                 {link.name}
               </Link>
             );
           })}
           <Button
-            className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all focus:ring-4 focus:ring-primary/20"
+            className="w-auto md:w-full bg-primary hover:bg-primary/90 text-white font-semibold py-2 px-4 md:py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all focus:ring-4 focus:ring-primary/20 shrink-0 ml-auto md:ml-0"
             onClick={() => setIsShareModalOpen(true)}
           >
-            <Share2 className="w-4.5 h-4.5" /> Share
+            <Share2 className="w-4 h-4 md:w-4.5 md:h-4.5" />{" "}
+            <span className="hidden sm:inline">Share</span>
           </Button>
         </div>
 
@@ -207,7 +223,7 @@ export default function FormLayout({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className="flex-col bg-background min-h-screen max-w-4xl mx-auto w-full p-8 gap-5 flex  relative"
+        className="flex-col bg-background min-h-[calc(100vh-140px)] md:min-h-screen max-w-4xl mx-auto w-full p-4 md:p-8 gap-5 flex relative"
       >
         {children}
       </motion.div>
@@ -259,7 +275,11 @@ export default function FormLayout({
                       className="bg-primary hover:bg-primary/90 text-white p-2 rounded-lg transition-colors "
                       onClick={copyLink}
                     >
-                      {copied ? <CheckIcon className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      {copied ? (
+                        <CheckIcon className="w-4 h-4" />
+                      ) : (
+                        <Copy className="w-4 h-4" />
+                      )}
                     </Button>
                   </div>
 
@@ -291,7 +311,9 @@ export default function FormLayout({
                     </Button>
                   </div>
                   <div className="w-full">
-                    <Button className="w-full" onClick={handleUnpublish}>Set to Draft</Button>
+                    <Button className="w-full" onClick={handleUnpublish}>
+                      Set to Draft
+                    </Button>
                   </div>
                 </div>
               )}

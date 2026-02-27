@@ -1,7 +1,15 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Search, Plus, X, Loader2 } from "lucide-react";
+import {
+  RiSearchLine as Search,
+  RiAddLine as Plus,
+  RiCloseLine as X,
+  RiLoader4Line as Loader2,
+  RiSparklingFill as Sparkle,
+  RiSparklingFill as SparkleIcon,
+  RiSparklingFill as LucideSparkles,
+} from "@remixicon/react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { FormCard } from "@/components/ui/form-card";
@@ -36,7 +44,7 @@ export default function DashboardPage() {
   const [isCreating, setIsCreating] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-  const [showMore, setShowMore]  = useState(false);
+  const [showMore, setShowMore] = useState(false);
 
   // AI Modal States
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
@@ -180,20 +188,18 @@ export default function DashboardPage() {
     return null;
   }
 
-  
-
   return (
     <div className="flex flex-col flex-1 min-h-screen relative bg-background">
       {/* Main Content Space */}
-      <main className="flex-1 w-full max-w-6xl mx-auto px-8 pt-10 pb-20">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 md:px-8 pt-6 md:pt-10 pb-20">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
           <h1 className="text-4xl  font-bold text-primary tracking-tight dark:text-foreground">
             Hello, {user?.name || "..."}
           </h1>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
             <Button
-              className="bg-[#D946EF] hover:bg-[#D946EF]/90 text-white  rounded-xl h-12 shadow-md transition-all border-none"
+              className="w-full md:w-auto bg-[#D946EF] hover:bg-[#D946EF]/90 text-white rounded-xl h-12 shadow-md transition-all border-none"
               onClick={() => setIsAiModalOpen(true)}
             >
               <img src="sparkle.png" alt="" className="w-5" />
@@ -202,7 +208,7 @@ export default function DashboardPage() {
 
             <Button
               variant="outline"
-              className="text-primary border-primary border-2 rounded-xl h-12 shadow-sm bg-background disabled:opacity-50"
+              className="w-full md:w-auto text-primary border-primary border-2 rounded-xl h-12 shadow-sm bg-background disabled:opacity-50"
               onClick={handleCreateForm}
               disabled={isCreating}
             >
@@ -230,19 +236,26 @@ export default function DashboardPage() {
         <div className="bg-background px-6 py-8 border-border border-2 rounded-2xl">
           <Tabs defaultValue="all" className="w-full mb-8">
             <TabsList variant="underline">
-              <TabsTrigger value="all">
-                All <span className="ml-2"> ({filteredForms.length})</span>
+              <TabsTrigger value="all" className="flex-1 text-xs md:text-sm">
+                All{" "}
+                <span className="ml-1 md:ml-2"> ({filteredForms.length})</span>
               </TabsTrigger>
-              <TabsTrigger value="published">
+              <TabsTrigger
+                value="published"
+                className="flex-1 text-xs md:text-sm"
+              >
                 Published{" "}
-                <span className="ml-2">
+                <span className="ml-1 md:ml-2">
                   {" "}
                   ({filteredForms.filter((form) => form.isPublished).length})
                 </span>
               </TabsTrigger>
-              <TabsTrigger value="not-published">
+              <TabsTrigger
+                value="not-published"
+                className="flex-1 text-xs md:text-sm"
+              >
                 Not Published{" "}
-                <span className="ml-2">
+                <span className="ml-1 md:ml-2">
                   {" "}
                   ({filteredForms.filter((form) => !form.isPublished).length})
                 </span>
@@ -252,7 +265,7 @@ export default function DashboardPage() {
             <TabsContent value="all" className="mt-6">
               <div className="">
                 <div
-                  className={`grid gap-4 rounded-2xl ${filteredForms.length === 0 || isLoading ? "grid-cols-1" : "grid-cols-2"}`}
+                  className={`grid gap-4 rounded-2xl ${filteredForms.length === 0 || isLoading ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"}`}
                 >
                   {isLoading ? (
                     <div className="flex flex-col items-center justify-center h-full w-full py-10">
@@ -290,7 +303,7 @@ export default function DashboardPage() {
             <TabsContent value="published" className="mt-6">
               <div className="">
                 <div
-                  className={`grid gap-4 rounded-2xl ${filteredForms.filter((f) => f.isPublished).length === 0 || isLoading ? "grid-cols-1" : "grid-cols-2"}`}
+                  className={`grid gap-4 rounded-2xl ${filteredForms.filter((f) => f.isPublished).length === 0 || isLoading ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"}`}
                 >
                   {isLoading ? (
                     <div className="flex flex-col items-center justify-center h-full w-full py-10">
@@ -331,7 +344,7 @@ export default function DashboardPage() {
             <TabsContent value="not-published" className="mt-6">
               <div className="">
                 <div
-                  className={`grid gap-4 rounded-2xl ${filteredForms.filter((f) => !f.isPublished).length === 0 || isLoading ? "grid-cols-1" : "grid-cols-2"}`}
+                  className={`grid gap-4 rounded-2xl ${filteredForms.filter((f) => !f.isPublished).length === 0 || isLoading ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"}`}
                 >
                   {isLoading ? (
                     <div className="flex flex-col items-center justify-center h-full w-full py-10">
@@ -388,7 +401,7 @@ export default function DashboardPage() {
             </button>
 
             <div className="flex items-center gap-2 mb-2">
-              <img src="sparkle.png" alt="" className="w-6" />
+              <LucideSparkles className="w-6 h-6" />
               <h2 className="text-xl font-bold text-foreground">
                 Generate with AI
               </h2>
@@ -419,7 +432,7 @@ export default function DashboardPage() {
                     Generating...
                   </>
                 ) : (
-                  "✨ Generate"
+                  " Generate"
                 )}
               </button>
             </div>

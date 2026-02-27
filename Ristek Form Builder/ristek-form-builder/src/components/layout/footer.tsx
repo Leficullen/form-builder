@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Github, Instagram, Linkedin, Mail, Heart } from "lucide-react";
+import {
+  RiGithubFill as Github,
+  RiInstagramFill as Instagram,
+  RiLinkedinBoxFill as Linkedin,
+  RiMailLine as Mail,
+  RiHeartFill as Heart,
+} from "@remixicon/react";
 
 export function Footer() {
   const pathname = usePathname();
@@ -93,7 +99,6 @@ export function Footer() {
         </div>
 
         {/* Resources */}
-        
 
         {/* Contact/Support */}
         <div className="justify-right">
@@ -127,7 +132,7 @@ export function Footer() {
           © {new Date().getFullYear()} All rights reserved.
         </p>
         <div className="flex items-center text-muted-foreground">
-          Doain moga lolos yak guyss awowkwkwk  
+          Doain moga lolos yak guyss awowkwkwk
         </div>
       </div>
     </footer>
