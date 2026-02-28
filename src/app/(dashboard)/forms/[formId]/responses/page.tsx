@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 
 export default function ResponsesPage() {
   const params = useParams();
-  const formId = params.formId as string;
+  const formId = (params?.formId as string) || "";
 
   const [isLoading, setIsLoading] = useState(true);
   const [form, setForm] = useState<any>(null);

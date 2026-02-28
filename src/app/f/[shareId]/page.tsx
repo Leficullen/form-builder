@@ -25,7 +25,7 @@ type Form = {
 
 export default function PublicFormPage() {
   const params = useParams();
-  const shareId = params.shareId as string;
+  const shareId = (params?.shareId as string) || "";
   const router = useRouter();
 
   const [form, setForm] = useState<Form | null>(null);

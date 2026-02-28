@@ -12,7 +12,7 @@ import { fetchApi } from "@/lib/api";
 
 export default function EditFormPage() {
   const params = useParams();
-  const formId = params.formId as string;
+  const formId = (params?.formId as string) || "";
   const [questions, setQuestions] = useState<any[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");

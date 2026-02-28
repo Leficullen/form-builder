@@ -8,7 +8,7 @@ import { RiLoader4Line as Loader2 } from "@remixicon/react";
 
 export default function PreviewFormPage() {
   const params = useParams();
-  const formId = params.formId as string;
+  const formId = (params?.formId as string) || "";
   const [questions, setQuestions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState("");

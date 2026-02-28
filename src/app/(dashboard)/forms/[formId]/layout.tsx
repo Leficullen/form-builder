@@ -34,7 +34,7 @@ export default function FormLayout({
 }) {
   const pathname = usePathname();
   const params = useParams();
-  const formId = params.formId as string;
+  const formId = (params?.formId as string) || "";
   const [title, setTitle] = useState("");
   const [status, setStatus] = useState("");
   const [isPublic, setIsPublic] = useState(false);
