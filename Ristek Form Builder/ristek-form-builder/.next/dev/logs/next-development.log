@@ -34,3 +34,4 @@ Require stack:
 [02:49:05.658] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
 [02:49:05.667] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
 [02:49:05.669] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[05:15:44.695] Server  LOG     ✓ Compiled in 103ms
