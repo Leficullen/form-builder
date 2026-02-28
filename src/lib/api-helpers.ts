@@ -30,6 +30,7 @@ export function badRequest(message = "Bad request") {
 }
 
 export function serverError(e: unknown) {
-  console.error(e);
-  return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+  const message = e instanceof Error ? e.message : String(e);
+  console.error("[API ERROR]", message, e);
+  return NextResponse.json({ message: `Server error: ${message}` }, { status: 500 });
 }
