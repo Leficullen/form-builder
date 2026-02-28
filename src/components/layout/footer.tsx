@@ -12,7 +12,7 @@ import {
 
 export function Footer() {
   const pathname = usePathname();
-  const isAuthPage = pathname === "/login" || pathname === "/register";
+  const isAuthPage = pathname && (pathname === "/login" || pathname === "/register");
 
   if (isAuthPage) return null;
 
@@ -77,14 +77,6 @@ export function Footer() {
                 className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium"
               >
                 Dashboard
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/tutorial"
-                className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium"
-              >
-                Tutorial
               </Link>
             </li>
             <li>

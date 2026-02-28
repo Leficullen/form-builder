@@ -36,10 +36,6 @@ export function Navbar() {
 
   const navLink = [
     {
-      name: "Tutorial",
-      href: "/tutorial",
-    },
-    {
       name: "Dashboard",
       href: "/dashboard",
     },
@@ -69,7 +65,7 @@ export function Navbar() {
                 key={nav.name}
                 href={nav.href}
                 className={`text-lg font-semibold hover:text-primary transition-colors duration-200 ${
-                  pathname === nav.href
+                  pathname && pathname === nav.href
                     ? "text-primary"
                     : "text-foreground/70"
                 }`}
@@ -136,7 +132,7 @@ export function Navbar() {
                   key={nav.name}
                   href={nav.href}
                   className={`text-xl font-semibold py-2 px-4 rounded-xl hover:bg-primary/10 transition-colors ${
-                    pathname === nav.href
+                    pathname && pathname === nav.href
                       ? "text-primary bg-primary/5"
                       : "text-foreground/70"
                   }`}
