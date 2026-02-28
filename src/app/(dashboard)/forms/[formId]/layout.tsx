@@ -148,19 +148,19 @@ export default function FormLayout({
       name: "Edit",
       href: `/forms/${formId}/edit`,
       icon: Pencil,
-      active: pathname.includes(`/forms/${formId}/edit`),
+      active: pathname?.includes(`/forms/${formId}/edit`) || false,
     },
     {
       name: "Preview",
       href: `/forms/${formId}/preview`,
       icon: Eye,
-      active: pathname.includes(`/forms/${formId}/preview`),
+      active: pathname?.includes(`/forms/${formId}/preview`) || false,
     },
     {
       name: "Response",
       href: `/forms/${formId}/responses`,
       icon: BarChart2,
-      active: pathname.includes(`/forms/${formId}/responses`),
+      active: pathname?.includes(`/forms/${formId}/responses`) || false,
     },
   ];
 
