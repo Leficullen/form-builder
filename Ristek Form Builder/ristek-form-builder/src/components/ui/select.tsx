@@ -2,7 +2,11 @@
 
 import * as React from "react";
 import { Select as SelectPrimitive } from "radix-ui";
-import { Check, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  RiCheckLine as Check,
+  RiArrowDownSLine as ChevronDown,
+  RiArrowUpSLine as ChevronUp,
+} from "@remixicon/react";
 
 import { cn } from "@/lib/utils";
 
@@ -33,7 +37,7 @@ function SelectTrigger({
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
       className={cn(
-        "border-foreground border data-[placeholder]:text-muted-foreground focus:ring-ring/50 flex h-10 w-full items-center justify-between rounded-xl border bg-transparent px-3 py-2 text-sm outline-none focus:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+        "border border-foreground/50 data-[placeholder]:text-muted-foreground focus:ring-ring/50 flex h-10 w-full items-center justify-between rounded-xl bg-transparent px-3 py-2 text-sm outline-none focus:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 cursor-pointer",
         className,
       )}
       {...props}
