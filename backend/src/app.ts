@@ -21,7 +21,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(
   cors({
-    origin: ["https://form-builder-pink-chi.vercel.app", "http://localhost:3000"],
+    origin: ["https://form-builder-pink-chi.vercel.app", "http://localhost:3000", /\.vercel\.app$/],
     credentials: true,
   }),
 );
