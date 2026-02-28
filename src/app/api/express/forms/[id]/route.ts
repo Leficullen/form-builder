@@ -46,51 +46,79 @@ export async function PUT(req: NextRequest, { params }: Params) {
     if (!existing) return notFound("Form not found");
     if (existing.ownerId !== userId) return forbidden();
 
-    const submissionCount = await prisma.submission.count({ where: { formId: id } });
-
-    if (submissionCount > 0 && body.questions) {
-      const keepIds = body.questions.filter((q: any) => q.id && !q.id.startsWith("new-")).map((q: any) => q.id);
-      const existingQuestions = await prisma.question.findMany({ where: { formId: id } });
-      const deletedQuestions = existingQuestions.filter((eq) => !keepIds.includes(eq.id));
-      if (deletedQuestions.length > 0) {
-        return NextResponse.json(
-          { message: "Cannot delete questions because submissions already exist for this form." },
-          { status: 400 }
-        );
+    // Validate: prevent deleting questions that have submissions
+    if (body.questions) {
+      const submissionCount = await prisma.submission.count({ where: { formId: id } });
+      if (submissionCount > 0) {
+        const keepIds = body.questions
+          .filter((q: any) => q.id && !q.id.startsWith("new-"))
+          .map((q: any) => q.id);
+        const existingQuestions = await prisma.question.findMany({ where: { formId: id } });
+        const deletedQuestions = existingQuestions.filter((eq) => !keepIds.includes(eq.id));
+        if (deletedQuestions.length > 0) {
+          return NextResponse.json(
+            { message: "Cannot delete questions because submissions already exist for this form." },
+            { status: 400 }
+          );
+        }
       }
     }
 
-    const finalForm = await prisma.$transaction(async (tx: any) => {
-      const updated = await tx.form.update({
-        where: { id },
-        data: { title: body.title, description: body.description, status: body.status },
-      });
+    // Update form data (sequential queries, no interactive transaction -
+    // interactive transactions are not supported by PrismaPg adapter)
+    await prisma.form.update({
+      where: { id },
+      data: {
+        ...(body.title !== undefined && { title: body.title }),
+        ...(body.description !== undefined && { description: body.description }),
+        ...(body.status !== undefined && { status: body.status }),
+      },
+    });
 
-      if (body.questions) {
-        const keepIds: string[] = [];
-        for (const q of body.questions) {
-          const processedOptions = q.options ? q.options.filter(Boolean) : [];
-          if (q.id && !q.id.startsWith("new-")) {
-            const updatedQ = await tx.question.upsert({
-              where: { id: q.id },
-              update: { title: q.title, type: q.type, required: q.required ?? false, options: processedOptions },
-              create: { formId: updated.id, title: q.title, type: q.type, required: q.required ?? false, options: processedOptions },
-            });
-            keepIds.push(updatedQ.id);
-          } else {
-            const newQ = await tx.question.create({
-              data: { formId: updated.id, title: q.title, type: q.type, required: q.required ?? false, options: processedOptions },
-            });
-            keepIds.push(newQ.id);
-          }
+    // Update questions if provided
+    if (body.questions) {
+      const keepIds: string[] = [];
+
+      for (const q of body.questions) {
+        const processedOptions = q.options ? q.options.filter(Boolean) : [];
+
+        if (q.id && !q.id.startsWith("new-")) {
+          // Update existing question
+          await prisma.question.update({
+            where: { id: q.id },
+            data: {
+              title: q.title,
+              type: q.type,
+              required: q.required ?? false,
+              options: processedOptions,
+            },
+          });
+          keepIds.push(q.id);
+        } else {
+          // Create new question
+          const newQ = await prisma.question.create({
+            data: {
+              formId: id,
+              title: q.title,
+              type: q.type,
+              required: q.required ?? false,
+              options: processedOptions,
+            },
+          });
+          keepIds.push(newQ.id);
         }
-        await tx.question.deleteMany({ where: { formId: updated.id, id: { notIn: keepIds } } });
       }
 
-      return await tx.form.findUnique({
-        where: { id: updated.id },
-        include: { questions: { orderBy: { createdAt: "asc" } } },
+      // Delete questions that were removed
+      await prisma.question.deleteMany({
+        where: { formId: id, id: { notIn: keepIds } },
       });
+    }
+
+    // Fetch and return the updated form
+    const finalForm = await prisma.form.findUnique({
+      where: { id },
+      include: { questions: { orderBy: { createdAt: "asc" } } },
     });
 
     return NextResponse.json({ form: finalForm });
