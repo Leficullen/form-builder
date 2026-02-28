@@ -1,16 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-// @ts-ignore
-import { app } from '../../../../backend/src/app';
-
-// Next.js Pages Router API Config
-export const config = {
-  api: {
-    externalResolver: true,
-    bodyParser: false, // Express will handle body parsing
-  },
-};
-
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  // Pass the request and response to the Express app
-  return app(req, res);
-}
+// This file is intentionally empty - the Express backend is now
+// implemented as native Next.js App Router API routes under
+// src/app/api/express/
+// 
+// This file is kept as a placeholder to prevent import resolution errors.
+export {};
