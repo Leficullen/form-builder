@@ -1,0 +1,36 @@
+[02:49:04.751] Server  ERROR   Error: ENOENT: no such file or directory, open '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/.next/dev/server/middleware-manifest.json'
+[02:49:05.065] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.068] Server  ERROR   ⨯ "unhandledRejection:" Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.069] Server  ERROR   ⨯ "unhandledRejection: " Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.092] Server  LOG     ✓ Compiled in 5s
+[02:49:05.512] Server  ERROR   ⨯ Error: ENOENT: no such file or directory, open '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/.next/dev/static/development/_buildManifest.js.tmp.o1ajqknvgkc'
+[02:49:05.588] Server  ERROR   Error: Cannot find module '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/node_modules/styled-jsx/index.js'
+Require stack:
+- /Users/alfirizqy/WebDev/form-builder/node_modules/next/dist/compiled/next-server/pages-turbo.runtime.dev.js
+- /Users/alfirizqy/WebDev/form-builder/node_modules/next/dist/server/route-modules/pages/module.compiled.js
+- /Users/alfirizqy/WebDev/form-builder/node_modules/next/dist/server/route-modules/pages/vendored/contexts/html-context.js
+- /Users/alfirizqy/WebDev/form-builder/node_modules/next/dist/pages/_document.js
+- /Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/node_modules/next/dist/server/load-default-error-components.js
+- /Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/node_modules/next/dist/server/dev/next-dev-server.js
+- /Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/node_modules/next/dist/server/next.js
+- /Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/node_modules/next/dist/server/lib/start-server.js
+[02:49:05.591] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.592] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.594] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.594] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.596] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.596] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.598] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.598] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.601] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.602] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.605] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.606] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.619] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.622] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.629] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.637] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.652] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.658] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.667] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
+[02:49:05.669] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/alfirizqy/WebDev/form-builder/Ristek Form Builder/ristek-form-builder/src/app'
