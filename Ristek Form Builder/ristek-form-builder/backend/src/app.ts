@@ -9,11 +9,15 @@ import { requireAuth } from "./middleware/auth";
 import { prisma } from "./lib/prisma";
 
 import path from "path";
+import swaggerUi from "swagger-ui-express";
+import { swaggerDocument } from "./swagger";
 
 dotenv.config();
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 export const app = express();
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(
   cors({
