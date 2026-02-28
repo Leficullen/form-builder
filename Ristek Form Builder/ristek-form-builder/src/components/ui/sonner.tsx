@@ -19,7 +19,14 @@ const Toaster = ({ ...props }: ToasterProps) => {
       className="toaster group"
       position="top-center"
       toastOptions={{
-        className: "p-5 text-base sm:text-lg",
+        unstyled: true,
+        classNames: {
+          toast:
+            "group toast flex items-center gap-3 w-full p-5 rounded-2xl border shadow-lg transition-all text-base sm:text-lg font-medium bg-transparent",
+          error: "bg-[#ef4444] text-white border-[#ef4444]",
+          success: "bg-[#22c55e] text-white border-[#22c55e]",
+          default: "bg-card text-card-foreground border-border",
+        },
       }}
       icons={{
         success: <CircleCheckIcon className="size-5" />,
@@ -30,13 +37,13 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       style={
         {
-          "--normal-bg": "hsl(var(--background))",
-          "--normal-text": "hsl(var(--foreground))",
-          "--normal-border": "hsl(var(--border))",
-          "--success-bg": "#3DC13C",
-          "--success-text": "white",
-          "--error-bg": "#EF4444",
-          "--error-text": "white",
+          "--normal-bg": "var(--card)",
+          "--normal-text": "var(--card-foreground)",
+          "--normal-border": "var(--border)",
+          "--success-bg": "#22c55e",
+          "--success-text": "#ffffff",
+          "--error-bg": "#ef4444",
+          "--error-text": "#ffffff",
           "--border-radius": "var(--radius)",
           "--width": "420px",
           "--height": "100px",

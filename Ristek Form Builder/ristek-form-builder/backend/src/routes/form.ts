@@ -22,8 +22,29 @@ const formCreateSchema = z.object({
 
 router.get("/", requireAuth as any, async (req: any, res, next) => {
   try {
+    const { search } = req.query;
     const forms = await prisma.form.findMany({
-      where: { ownerId: req.userId },
+      where: {
+        ownerId: req.userId,
+        ...(search
+          ? {
+              OR: [
+                {
+                  title: {
+                    contains: String(search),
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  description: {
+                    contains: String(search),
+                    mode: "insensitive",
+                  },
+                },
+              ],
+            }
+          : {}),
+      },
       orderBy: { createdAt: "desc" },
       select: {
         id: true,
@@ -152,7 +173,7 @@ router.put("/:id", requireAuth as any, async (req: any, res, next) => {
         const keepIds: string[] = [];
 
         for (const q of body.questions) {
-          const processedOptions = q.options ? q.options.filter(Boolean) : []; 
+          const processedOptions = q.options ? q.options.filter(Boolean) : [];
 
           if (q.id && !q.id.startsWith("new-")) {
             const updatedQ = await tx.question.upsert({

@@ -81,8 +81,11 @@ export default function DashboardPage() {
     if (!getToken()) return;
 
     const fetchForms = async () => {
+      setIsLoading(true);
       try {
-        const response = await fetchApi("/forms");
+        const response = await fetchApi(
+          `/forms${searchTerm ? `?search=${encodeURIComponent(searchTerm)}` : ""}`,
+        );
         if (response && response.forms) {
           setForms(response.forms);
         }
@@ -93,8 +96,9 @@ export default function DashboardPage() {
       }
     };
 
-    fetchForms();
-  }, []);
+    const timeoutId = setTimeout(fetchForms, 500);
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm]);
 
   const handleCreateForm = async () => {
     try {
@@ -180,9 +184,7 @@ export default function DashboardPage() {
     setSearchTerm(e.target.value);
   };
 
-  const filteredForms = forms.filter((form) =>
-    form.title.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  const filteredForms = forms;
 
   if (!isMounted || !getToken()) {
     return null;
@@ -269,18 +271,21 @@ export default function DashboardPage() {
                 >
                   {isLoading ? (
                     <div className="flex flex-col items-center justify-center h-full w-full py-10">
+                      <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
                       <p className="text-foreground animate-pulse font-medium">
-                        Loading forms...
+                        {searchTerm ? "Searching forms..." : "Loading forms..."}
                       </p>
                     </div>
                   ) : filteredForms.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-full w-full py-10">
                       <img src="ruby-searching.png" alt="" className="w-40" />
                       <h3 className="text-foreground font-semibold text-xl">
-                        No Forms Yet
+                        {searchTerm ? "No Results Found" : "No Forms Yet"}
                       </h3>
                       <p className="text-foreground/50">
-                        Create your first form to get started
+                        {searchTerm
+                          ? `We couldn't find any forms matching "${searchTerm}"`
+                          : "Create your first form to get started"}
                       </p>
                     </div>
                   ) : (
@@ -307,8 +312,9 @@ export default function DashboardPage() {
                 >
                   {isLoading ? (
                     <div className="flex flex-col items-center justify-center h-full w-full py-10">
+                      <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
                       <p className="text-foreground animate-pulse font-medium">
-                        Loading forms...
+                        {searchTerm ? "Searching..." : "Loading forms..."}
                       </p>
                     </div>
                   ) : filteredForms.filter((f) => f.isPublished).length ===
@@ -316,10 +322,12 @@ export default function DashboardPage() {
                     <div className="flex flex-col items-center justify-center h-full w-full py-10">
                       <img src="ruby-searching.png" alt="" className="w-40" />
                       <h3 className="text-foreground font-semibold text-xl">
-                        No Published Forms
+                        {searchTerm ? "No Matches" : "No Published Forms"}
                       </h3>
                       <p className="text-foreground/50">
-                        You haven't published any forms yet
+                        {searchTerm
+                          ? `No published forms match "${searchTerm}"`
+                          : "You haven't published any forms yet"}
                       </p>
                     </div>
                   ) : (
@@ -348,8 +356,9 @@ export default function DashboardPage() {
                 >
                   {isLoading ? (
                     <div className="flex flex-col items-center justify-center h-full w-full py-10">
+                      <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
                       <p className="text-foreground animate-pulse font-medium">
-                        Loading forms...
+                        {searchTerm ? "Searching..." : "Loading forms..."}
                       </p>
                     </div>
                   ) : filteredForms.filter((f) => !f.isPublished).length ===
@@ -357,10 +366,12 @@ export default function DashboardPage() {
                     <div className="flex flex-col items-center justify-center h-full w-full py-10">
                       <img src="ruby-searching.png" alt="" className="w-40" />
                       <h3 className="text-foreground font-semibold text-xl">
-                        No Draft Forms
+                        {searchTerm ? "No Matches" : "No Draft Forms"}
                       </h3>
                       <p className="text-foreground/50">
-                        You don't have any unpublished forms
+                        {searchTerm
+                          ? `No draft forms match "${searchTerm}"`
+                          : "You don't have any unpublished forms"}
                       </p>
                     </div>
                   ) : (

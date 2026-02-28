@@ -131,7 +131,7 @@ export default function PublicFormPage() {
         className="max-w-3xl mx-auto flex flex-col gap-6"
       >
         {/* Form Header */}
-        <div className="bg-primary rounded-2xl p-6 text-center flex flex-col items-center justify-center mt-2 relative overflow-hidden">
+        <div className="bg-primary rounded-2xl p-6 text-center flex flex-col items-center justify-center mt-20 relative overflow-hidden">
           <img
             src="/banner-pattern-left.png"
             alt=""
@@ -176,7 +176,7 @@ export default function PublicFormPage() {
         ))}
 
         <div className="flex items-center justify-between mt-4">
-          <button
+          <Button
             type="submit"
             disabled={isSubmitting}
             className="bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-8 rounded-xl flex items-center gap-2 shadow-md transition-all focus:ring-4 focus:ring-primary/20 disabled:opacity-70 disabled:cursor-not-allowed"
@@ -186,7 +186,7 @@ export default function PublicFormPage() {
             ) : (
               "Submit"
             )}
-          </button>
+          </Button>
           <a
             href="#"
             className="hidden text-sm text-primary hover:underline font-medium"

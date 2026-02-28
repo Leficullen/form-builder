@@ -7,6 +7,8 @@ import { removeToken } from "@/lib/token";
 import Link from "next/link";
 import { getToken } from "@/lib/token";
 import { use, useEffect, useState } from "react";
+import { RiMenuLine, RiCloseLine } from "@remixicon/react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function Navbar() {
   const router = useRouter();
@@ -14,11 +16,17 @@ export function Navbar() {
 
   const [authorized, setAuthorized] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
     const token = getToken();
     setAuthorized(!!token);
+  }, [pathname]);
+
+  // Close menu on route change
+  useEffect(() => {
+    setIsMenuOpen(false);
   }, [pathname]);
 
   const isAuthPage =
@@ -38,53 +46,130 @@ export function Navbar() {
   ];
 
   return (
-    <header className="fixed top-0 z-50 flex flex-col md:flex-row w-full items-center justify-between border-b border-foreground/10 px-4 md:px-8 py-2 md:py-2 gap-2 md:gap-0 transition-colors duration-200 bg-background/70 backdrop-blur-md">
-      <Link href="/" className="flex items-center w-fit cursor-pointer">
-        <img
-          src="/login-register-assets/logo-with-text.png"
-          alt="Ristek Fasilkom UI Form Builder"
-          className="h-12 md:h-16 w-auto dark:hidden"
-        />
-        <img
-          src="/logo-with-text(dark).png"
-          alt="Ristek Fasilkom UI Form Builder"
-          className="h-12 md:h-16 w-auto dark:block hidden"
-        />
-      </Link>
+    <header className="fixed top-0 z-50 w-full border-b border-foreground/10 transition-colors duration-200 bg-background/70 backdrop-blur-md">
+      <div className="flex h-16 md:h-20 items-center justify-between px-4 md:px-8">
+        <Link href="/" className="flex items-center w-fit cursor-pointer shrink-0">
+          <img
+            src="/login-register-assets/logo-with-text.png"
+            alt="Ristek Fasilkom UI Form Builder"
+            className="h-10 md:h-16 w-auto dark:hidden"
+          />
+          <img
+            src="/logo-with-text(dark).png"
+            alt="Ristek Fasilkom UI Form Builder"
+            className="h-10 md:h-16 w-auto dark:block hidden"
+          />
+        </Link>
 
-      <div className="flex items-center gap-4 md:gap-10 overflow-x-auto w-full md:w-auto justify-center md:justify-end pb-2 md:pb-0 scrollbar-hide">
-        <ModeToggle />
-        {navLink.map((nav) => (
-          <Link
-            key={nav.name}
-            href={nav.href}
-            className={`items-center h-full hover:text-primary transition-colors duration-200 focus:font-semibold text-foreground/70 font-semibold text-sm md:text-lg whitespace-nowrap ${pathname == nav.href ? "font-semibold text-primary" : ""} `}
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-10">
+          <div className="flex items-center gap-8 mr-4">
+            {navLink.map((nav) => (
+              <Link
+                key={nav.name}
+                href={nav.href}
+                className={`text-lg font-semibold hover:text-primary transition-colors duration-200 ${
+                  pathname === nav.href
+                    ? "text-primary"
+                    : "text-foreground/70"
+                }`}
+              >
+                {nav.name}
+              </Link>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-4 border-l border-foreground/10 pl-8">
+            <ModeToggle />
+            {mounted &&
+              (authorized ? (
+                <Button
+                  className="bg-red-500 hover:bg-red-600 active:bg-red-700 font-bold rounded-xl px-6 h-10 shadow-sm text-white"
+                  onClick={() => {
+                    removeToken();
+                    setAuthorized(false);
+                    router.push("/login");
+                  }}
+                >
+                  Logout
+                </Button>
+              ) : (
+                <Button
+                  className="bg-primary hover:bg-primary/90 active:bg-primary/80 font-bold rounded-xl px-6 h-10 shadow-sm text-white"
+                  onClick={() => router.push("/login")}
+                >
+                  Login
+                </Button>
+              ))}
+          </div>
+        </div>
+
+        {/* Mobile Actions (Toggle + Menu Button) */}
+        <div className="flex md:hidden items-center gap-4">
+          <ModeToggle />
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="p-2 text-foreground/70 hover:text-primary transition-colors"
+            aria-label="Toggle Menu"
           >
-            {nav.name}
-          </Link>
-        ))}
-
-        {mounted &&
-          (authorized ? (
-            <Button
-              className="bg-red-500 hover:bg-red-600 active:bg-red-700 font-bold rounded-xl px-4 md:px-6 h-8 md:h-10 shadow-sm text-xs md:text-md text-white whitespace-nowrap"
-              onClick={() => {
-                removeToken();
-                setAuthorized(false);
-                router.push("/login");
-              }}
-            >
-              Logout
-            </Button>
-          ) : (
-            <Button
-              className="bg-primary hover:bg-primary/90 active:bg-primary/80 font-bold rounded-xl px-4 md:px-6 h-8 md:h-10 shadow-sm text-xs md:text-md text-white whitespace-nowrap"
-              onClick={() => router.push("/login")}
-            >
-              Login
-            </Button>
-          ))}
+            {isMenuOpen ? (
+              <RiCloseLine className="size-8" />
+            ) : (
+              <RiMenuLine className="size-8" />
+            )}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden border-t border-foreground/10 bg-background overflow-hidden"
+          >
+            <div className="flex flex-col p-4 gap-4">
+              {navLink.map((nav) => (
+                <Link
+                  key={nav.name}
+                  href={nav.href}
+                  className={`text-xl font-semibold py-2 px-4 rounded-xl hover:bg-primary/10 transition-colors ${
+                    pathname === nav.href
+                      ? "text-primary bg-primary/5"
+                      : "text-foreground/70"
+                  }`}
+                >
+                  {nav.name}
+                </Link>
+              ))}
+              <div className="pt-4 border-t border-foreground/10 flex flex-col gap-4">
+                {mounted &&
+                  (authorized ? (
+                    <Button
+                      className="w-full bg-red-500 hover:bg-red-600 font-bold rounded-xl h-12 text-white text-lg"
+                      onClick={() => {
+                        removeToken();
+                        setAuthorized(false);
+                        router.push("/login");
+                      }}
+                    >
+                      Logout
+                    </Button>
+                  ) : (
+                    <Button
+                      className="w-full bg-primary hover:bg-primary/90 font-bold rounded-xl h-12 text-white text-lg"
+                      onClick={() => router.push("/login")}
+                    >
+                      Login
+                    </Button>
+                  ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
