@@ -98,6 +98,15 @@ export function Footer() {
                 Design System
               </Link>
             </li>
+            <li>
+              <Link
+                href="/api-docs"
+                className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium"
+                target="_blank"
+              >
+                API Docs
+              </Link>
+            </li>
           </ul>
         </div>
 

@@ -43,6 +43,10 @@ export function Navbar() {
       name: "Tutorial",
       href: "/tutorial",
     },
+    {
+      name: "API Docs",
+      href: "/api-docs",
+    },
   ];
 
   return (
