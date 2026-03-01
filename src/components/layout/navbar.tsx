@@ -39,6 +39,10 @@ export function Navbar() {
       name: "Dashboard",
       href: "/dashboard",
     },
+    {
+      name: "Tutorial",
+      href: "/tutorial",
+    },
   ];
 
   return (

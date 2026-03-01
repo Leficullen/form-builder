@@ -27,6 +27,8 @@ export default function Home() {
           alt=""
           className="absolute top-0 right-0 w-[30%] opacity-20 dark:block hidden"
         />
+        <img src="/ruby-tablet.png" alt="ruby-tablet" className="absolute top-[25%] right-[8%] w-[20%] animate-float hidden md:block" />
+        <img src="/ruby-happy.png" alt="ruby-tablet" className="absolute top-[40%] left-[8%] w-[20%] -scale-x-100 animate-float-delayed hidden md:block" />
       </div>
       {/* Decorative background element */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-hover/30 blur-[120px] rounded-full -z-10 animate-pulse "></div>
