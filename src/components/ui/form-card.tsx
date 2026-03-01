@@ -42,7 +42,7 @@ export function FormCard({
         <div className="flex items-center justify-between bg-linear-to-b from-primary to-primary/80  px-4 py-3">
           {/* Title */}
           <div>
-            <h3 className="text-xl font-semibold text-white leading-tight tracking-tight ">
+            <h3 className="text-md md:text-xl font-semibold text-white leading-tight tracking-tight ">
               {title}
             </h3>
           </div>
@@ -59,7 +59,7 @@ export function FormCard({
           </button>
         </div>
 
-        <div className="px-4 grid grid-cols-[4fr_1fr] w-full justify-between">
+        <div className="px-4 grid grid-cols-[1fr] gap-3 md:grid-cols-[4fr_1fr] w-full  justify-between">
           {/* Description */}
           <p className="text-foreground/70 dark:text-foreground/60 text-md leading-relaxed line-clamp-2 mt-2">
             {description}
@@ -67,7 +67,7 @@ export function FormCard({
           {/* Status badges */}
           <span
             className={cn(
-              "px-2 py-0.5 rounded-full text-xs font-semibold -ml-2 inline-block transition-colors items-center h-fit my-auto text-center items-center",
+              "px-2 py-1 rounded-full text-xs font-semibold -ml-2 inline-block transition-colors items-center h-fit my-auto text-center items-center my-auto",
               isPublished
                 ? "bg-[#DCFCE7] text-[#15803D] dark:bg-green-950/40 dark:text-green-400"
                 : "bg-[#FBD3D4] text-[#D20004] dark:bg-orange-950/40 dark:text-orange-400",

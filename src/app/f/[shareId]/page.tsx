@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { RiLoader4Line as Loader2 } from "@remixicon/react";
 import { Button } from "@/components/ui/button";
 import { FormQuestion, QuestionType } from "@/components/FormQuestion";
+import Link from "next/link";
 
 type Question = {
   id: string;
@@ -54,6 +55,22 @@ export default function PublicFormPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form) return;
+
+    // Client-side validation for required fields
+    const missingRequired = form.questions.filter((q) => {
+      if (!q.required) return false;
+      const val = answers[q.id];
+      return (
+        val === undefined ||
+        val === "" ||
+        (Array.isArray(val) && val.length === 0)
+      );
+    });
+
+    if (missingRequired.length > 0) {
+      toast.warning("Please fill out all required fields marked with a red star.");
+      return;
+    }
 
     // Build payload
     const payload = {
@@ -111,15 +128,24 @@ export default function PublicFormPage() {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-primary dark:bg-background pt-16 p-4">
-        <div className="max-w-2xl mx-auto bg-card rounded-xl p-8 shadow-sm border border-border text-center">
+      <div className="min-h-screen bg-background pt-16 p-4 flex items-center justify-center flex-col gap-6">
+        <div className="max-w-2xl w-full bg-card mx-auto rounded-2xl p-6  text-center h-full">
+          <img src="/ruby-happy.png" alt="" className="w-50 mx-auto mb-4 bg-hover rounded-full p-4" />
           <h1 className="text-3xl font-bold text-foreground mb-4">
             Response submitted!
           </h1>
           <p className="text-muted-foreground">
             Your response has been successfully recorded.
           </p>
+          <p className="text-primary underline">
+            <Link href={"/f/" + shareId}>Submit another response</Link>
+          </p>
         </div>
+        <Button className="hover:-translate-y-1 transition-transform hover:shadow-xl shadow-primary/20">
+          <Link href="/">
+            Start making your own form
+          </Link>
+        </Button>
       </div>
     );
   }

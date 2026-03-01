@@ -39,14 +39,13 @@ export default function Home() {
           <h1 className="md:text-6xl text-2xl text-primary font-bold">
             BISMILLAH RISTEK <br />
           </h1>
-          <h2 className="text-primary text-6xl font-bold">
+          <h2 className="text-primary text-5xl md:text-6xl font-bold">
             Form <span className="text-foreground">Builder</span>
           </h2>
         </div>
 
-        <p className="text-xl text-foreground/50 max-w-2xl mx-auto leading-relaxed">
-          The most intuitive way to build, manage, and analyze your forms.
-          Powered by a modern design system and built for performance.
+        <p className="md:text-xl text-md  text-foreground/50 max-w-2xl mx-auto leading-relaxed">
+          A form builder website application made by a pacil student delivered to fulfill the Ristek Fasilkom UI Selection Process
         </p>
 
         <div className="grid md:grid-cols-2 grid-cols-1 items-center justify-center gap-4 pt-4">

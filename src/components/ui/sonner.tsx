@@ -22,9 +22,10 @@ const Toaster = ({ ...props }: ToasterProps) => {
         unstyled: true,
         classNames: {
           toast:
-            "group toast flex items-center gap-3 w-full p-5 rounded-2xl border shadow-lg transition-all text-base sm:text-lg font-medium bg-transparent",
+            "group toast flex items-center gap-3 w-full p-5 rounded-2xl border shadow-lg transition-all text-base sm:text-lg font-medium bg-card text-foreground",
           error: "bg-[#ef4444] text-white border-[#ef4444]",
           success: "bg-[#22c55e] text-white border-[#22c55e]",
+          warning: "bg-[#f59e0b] text-white border-[#f59e0b]",
           default: "bg-card text-card-foreground border-border",
         },
       }}
@@ -40,10 +41,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
           "--normal-bg": "var(--card)",
           "--normal-text": "var(--card-foreground)",
           "--normal-border": "var(--border)",
-          "--success-bg": "#22c55e",
-          "--success-text": "#ffffff",
-          "--error-bg": "#ef4444",
-          "--error-text": "#ffffff",
+          "--success-text": "#22c55e",
+          "--error-text": "#ef4444",
           "--border-radius": "var(--radius)",
           "--width": "420px",
           "--height": "100px",

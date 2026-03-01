@@ -105,7 +105,7 @@ export function Navbar() {
           <ModeToggle />
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="p-2 text-foreground/70 hover:text-primary transition-colors"
+            className="p-2 text-primary hover:bg-hover/50 rounded-full transition-colors"
             aria-label="Toggle Menu"
           >
             {isMenuOpen ? (
@@ -131,7 +131,7 @@ export function Navbar() {
                 <Link
                   key={nav.name}
                   href={nav.href}
-                  className={`text-xl font-semibold py-2 px-4 rounded-xl hover:bg-primary/10 transition-colors ${
+                  className={`text-lg font-semibold py-2 px-4 rounded-xl hover:bg-primary/10 transition-colors ${
                     pathname && pathname === nav.href
                       ? "text-primary bg-primary/5"
                       : "text-foreground/70"
@@ -144,7 +144,7 @@ export function Navbar() {
                 {mounted &&
                   (authorized ? (
                     <Button
-                      className="w-full bg-red-500 hover:bg-red-600 font-bold rounded-xl h-12 text-white text-lg"
+                      className="w-full bg-red-500 hover:bg-red-600 font-bold rounded-xl text-white"
                       onClick={() => {
                         removeToken();
                         setAuthorized(false);
@@ -155,7 +155,7 @@ export function Navbar() {
                     </Button>
                   ) : (
                     <Button
-                      className="w-full bg-primary hover:bg-primary/90 font-bold rounded-xl h-12 text-white text-lg"
+                      className="w-full bg-primary hover:bg-primary/90 font-bold rounded-xl text-white"
                       onClick={() => router.push("/login")}
                     >
                       Login

@@ -7,8 +7,12 @@ export const swaggerDocument = {
   },
   servers: [
     {
+      url: "/api/express",
+      description: "Proxied API (Production/Native)",
+    },
+    {
       url: "http://localhost:4000",
-      description: "Local development server",
+      description: "Direct Backend (Local)",
     },
   ],
   components: {

@@ -89,6 +89,10 @@ export function FormQuestion({
   const isPreview = viewState === "preview" || viewState === "fill";
   const isResponse = viewState === "response";
 
+  const onDeleteQuestion = () => {
+    onDelete?.();
+  };
+
   // Shared Type Labels across Preview and Response
   const fixedTypeLabel = (
     <div className="shrink-0 flex items-center md:items-start pt-1.5 md:pl-4">
@@ -122,8 +126,11 @@ export function FormQuestion({
               />
             </div>
           ) : (
-            <h3 className="text-base font-semibold text-foreground pt-1.5 px-0.5 break-words">
+            <h3 className="text-base font-semibold text-foreground pt-1.5 px-0.5 break-words flex items-center gap-1">
               {question.title || "Untitled Question"}
+              {question.required && (
+                <span className="text-[#D20004] font-bold">*</span>
+              )}
             </h3>
           )}
 

@@ -167,7 +167,7 @@ export default function FormLayout({
   return (
     <div className="flex flex-col md:flex-row w-full bg-background relative z-20 min-h-screen">
       {/* Sidebar / Topnav */}
-      <div className="flex flex-col md:flex-col w-full md:w-[250px] lg:w-[320px] shrink-0 border-b md:border-b-0 md:border-r border-foreground/10 md:h-screen md:sticky top-0 bg-card z-30">
+      <div className="flex flex-col w-full md:w-[250px] lg:w-[320px] shrink-0 border-b md:border-b-0 md:border-r border-foreground/10 h-auto md:h-screen fixed md:sticky top-0 bg-card z-30 md:-mt-[1%]">
         {/* Sidebar Header */}
         <div className="p-4 md:p-8 md:pb-6 flex items-center gap-4 border-b md:border-transparent shrink-0">
           <Link
@@ -187,26 +187,28 @@ export default function FormLayout({
         </div>
 
         {/* Navigation Links */}
-        <div className="px-4 md:px-6 flex flex-row md:flex-col gap-2 md:flex-1 pt-3 md:pt-2 pb-3 md:pb-0 overflow-x-auto whitespace-nowrap items-center md:items-stretch scrollbar-hide">
-          {navLinks.map((link) => {
-            const Icon = link.icon;
-            return (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={`flex items-center gap-2 md:gap-3 w-auto md:w-full px-4 md:px-5 py-2 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-colors cursor-pointer shrink-0 ${
-                  link.active
-                    ? "bg-hover dark:bg-primary/20 text-primary dark:text-[#b19df5]"
-                    : "hover:bg-muted text-foreground"
-                }`}
-              >
-                <Icon className="w-4 h-4 md:w-4.5 md:h-4.5" />
-                {link.name}
-              </Link>
-            );
-          })}
+        <div className="px-4 md:px-6 flex-col md:flex-col gap-4 md:flex-1 pt-3 md:pt-2 md:pb-0 overflow-x-auto whitespace-nowrap items-center md:items-stretch scrollbar-hide mt-3">
+          <div className=" md:flex md:flex-col gap-2 w-full mx-auto justify-center grid grid-cols-3 mb-3">
+            {navLinks.map((link) => {
+              const Icon = link.icon;
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={`flex items-center gap-2 md:gap-3 w-auto md:w-full px-4 md:px-5 py-3 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-colors cursor-pointer shrink-0 ${
+                    link.active
+                      ? "bg-hover dark:bg-primary/20 text-primary dark:text-[#b19df5]"
+                      : "hover:bg-muted text-foreground"
+                  }`}
+                >
+                  <Icon className="w-4 h-4 md:w-4.5 md:h-4.5" />
+                  {link.name}
+                </Link>
+              );
+            })}
+          </div>
           <Button
-            className="w-auto md:w-full bg-primary hover:bg-primary/90 text-white font-semibold py-2 px-4 md:py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all focus:ring-4 focus:ring-primary/20 shrink-0 ml-auto md:ml-0"
+            className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-4 md:py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all focus:ring-4 focus:ring-primary/20 shrink-0 ml-auto md:ml-0 mb-5"
             onClick={() => setIsShareModalOpen(true)}
           >
             <Share2 className="w-4 h-4 md:w-4.5 md:h-4.5" />{" "}
@@ -215,7 +217,7 @@ export default function FormLayout({
         </div>
 
         {/* Sidebar Bottom Button */}
-        <div className="p-6"></div>
+        <div className="hidden md:block md:p-6"></div>
       </div>
 
       {/* Main Content Area */}
@@ -223,7 +225,7 @@ export default function FormLayout({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className="flex-col bg-background min-h-[calc(100vh-140px)] md:min-h-screen max-w-4xl mx-auto w-full p-4 md:p-8 gap-5 flex relative"
+        className="flex-col bg-background min-h-[calc(100vh-140px)] md:min-h-screen max-w-4xl mx-auto w-full p-4 md:p-8 gap-5 flex relative md:mt-0 mt-[20%]"
       >
         {children}
       </motion.div>
@@ -283,9 +285,9 @@ export default function FormLayout({
                     </Button>
                   </div>
 
-                  <div className="flex items-center gap-3 mt-2">
+                  <div className="grid grid-cols-2 items-center gap-3 mt-2">
                     <Button
-                      className="flex-1 bg-destructive hover:bg-destructive/90 text-white font-semibold py-2.5 rounded-xl transition-all flex items-center justify-center text-sm"
+                      className="flex-1 bg-destructive hover:bg-destructive/90 text-white font-semibold py-3 w-full rounded-xl transition-all flex items-center justify-center text-sm"
                       onClick={handleShareDisable}
                       disabled={isSharing}
                     >
@@ -297,7 +299,7 @@ export default function FormLayout({
                     </Button>
 
                     <Button
-                      className="flex-1 border border-border bg-background hover:bg-muted font-semibold py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 text-sm text-foreground"
+                      className="flex-1 border border-border bg-background hover:bg-background/70 font-semibold py-3 rounded-xl w-full transition-all flex items-center justify-center gap-2 text-sm text-foreground"
                       onClick={handleRegenerate}
                       disabled={isSharing}
                     >

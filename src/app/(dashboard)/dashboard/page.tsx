@@ -180,6 +180,22 @@ export default function DashboardPage() {
     }
   };
 
+  const handleDeleteForm = async (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!confirm("Are you sure you want to delete this form?")) return;
+
+    try {
+      await fetchApi(`/forms/${id}`, {
+        method: "DELETE",
+      });
+      setForms((prev) => prev.filter((f) => f.id !== id));
+      toast.success("Form deleted successfully");
+    } catch (error) {
+      console.error("Failed to delete form:", error);
+      toast.error("Failed to delete form");
+    }
+  };
+
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
@@ -289,18 +305,34 @@ export default function DashboardPage() {
                       </p>
                     </div>
                   ) : (
-                    filteredForms.map((form) => (
-                      <FormCard
-                        key={form.id}
-                        title={form.title}
-                        description={form.description}
-                        isPublished={form.isPublished}
-                        questionCount={form.questionCount}
-                        responseCount={form.responseCount}
-                        date={form.date}
-                        onClick={() => router.push(`/forms/${form.id}/edit`)}
-                      />
-                    ))
+                    <>
+                      {filteredForms
+                        .slice(0, showMore ? filteredForms.length : 10)
+                        .map((form) => (
+                          <FormCard
+                            key={form.id}
+                            title={form.title}
+                            description={form.description}
+                            isPublished={form.isPublished}
+                            questionCount={form.questionCount}
+                            responseCount={form.responseCount}
+                            date={form.date}
+                            onClick={() => router.push(`/forms/${form.id}/edit`)}
+                            onDelete={(e) => handleDeleteForm(form.id, e)}
+                          />
+                        ))}
+                      {filteredForms.length > 10 && (
+                        <div className="md:col-span-2 flex justify-center mt-6">
+                          <Button
+                            variant="ghost"
+                            className="text-primary hover:text-primary/80 font-semibold"
+                            onClick={() => setShowMore(!showMore)}
+                          >
+                            {showMore ? "Show Less" : `Show More (${filteredForms.length - 10} more)`}
+                          </Button>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               </div>
@@ -331,20 +363,44 @@ export default function DashboardPage() {
                       </p>
                     </div>
                   ) : (
-                    filteredForms
-                      .filter((form) => form.isPublished)
-                      .map((form) => (
-                        <FormCard
-                          key={form.id}
-                          title={form.title}
-                          description={form.description}
-                          isPublished={form.isPublished}
-                          questionCount={form.questionCount}
-                          responseCount={form.responseCount}
-                          date={form.date}
-                          onClick={() => router.push(`/forms/${form.id}/edit`)}
-                        />
-                      ))
+                    <>
+                      {filteredForms
+                        .filter((form) => form.isPublished)
+                        .slice(
+                          0,
+                          showMore
+                            ? filteredForms.filter((form) => form.isPublished)
+                                .length
+                            : 10,
+                        )
+                        .map((form) => (
+                          <FormCard
+                            key={form.id}
+                            title={form.title}
+                            description={form.description}
+                            isPublished={form.isPublished}
+                            questionCount={form.questionCount}
+                            responseCount={form.responseCount}
+                            date={form.date}
+                            onClick={() => router.push(`/forms/${form.id}/edit`)}
+                            onDelete={(e) => handleDeleteForm(form.id, e)}
+                          />
+                        ))}
+                      {filteredForms.filter((form) => form.isPublished).length >
+                        10 && (
+                        <div className="md:col-span-2 flex justify-center mt-6">
+                          <Button
+                            variant="ghost"
+                            className="text-primary hover:text-primary/80 font-semibold"
+                            onClick={() => setShowMore(!showMore)}
+                          >
+                            {showMore
+                              ? "Show Less"
+                              : `Show More (${filteredForms.filter((form) => form.isPublished).length - 10} more)`}
+                          </Button>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               </div>
@@ -375,20 +431,43 @@ export default function DashboardPage() {
                       </p>
                     </div>
                   ) : (
-                    filteredForms
-                      .filter((f) => !f.isPublished)
-                      .map((form) => (
-                        <FormCard
-                          key={form.id}
-                          title={form.title}
-                          description={form.description}
-                          isPublished={form.isPublished}
-                          questionCount={form.questionCount}
-                          responseCount={form.responseCount}
-                          date={form.date}
-                          onClick={() => router.push(`/forms/${form.id}/edit`)}
-                        />
-                      ))
+                    <>
+                      {filteredForms
+                        .filter((f) => !f.isPublished)
+                        .slice(
+                          0,
+                          showMore
+                            ? filteredForms.filter((f) => !f.isPublished).length
+                            : 10,
+                        )
+                        .map((form) => (
+                          <FormCard
+                            key={form.id}
+                            title={form.title}
+                            description={form.description}
+                            isPublished={form.isPublished}
+                            questionCount={form.questionCount}
+                            responseCount={form.responseCount}
+                            date={form.date}
+                            onClick={() => router.push(`/forms/${form.id}/edit`)}
+                            onDelete={(e) => handleDeleteForm(form.id, e)}
+                          />
+                        ))}
+                      {filteredForms.filter((f) => !f.isPublished).length >
+                        10 && (
+                        <div className="md:col-span-2 flex justify-center mt-6">
+                          <Button
+                            variant="ghost"
+                            className="text-primary hover:text-primary/80 font-semibold"
+                            onClick={() => setShowMore(!showMore)}
+                          >
+                            {showMore
+                              ? "Show Less"
+                              : `Show More (${filteredForms.filter((f) => !f.isPublished).length - 10} more)`}
+                          </Button>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               </div>

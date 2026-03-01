@@ -11,7 +11,7 @@ export default function NotFound() {
         <div className="relative flex justify-center bg-hover flex-col p-8 rounded-2xl">
           <img src="/ruby-sad.png" alt="" className="w-[35%] mx-auto" />
           <h2 className="font-semibold text-foreground text-2xl">
-            Oopss... Something went wrong
+            We Are Developing!
           </h2>
         </div>
 

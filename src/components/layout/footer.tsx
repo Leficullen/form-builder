@@ -34,24 +34,23 @@ export function Footer() {
             />
           </div>
           <p className="text-muted-foreground text-sm leading-relaxed">
-            The most intuitive way to build, manage, and analyze your forms.
-            Empowering students and organizations with professional tools.
+            A form builder website application made by a pacil student delivered to fulfill the Ristek Fasilkom UI Selection Process
           </p>
           <div className="flex space-x-4">
             <Link
-              href="#"
+              href="https://github.com/Leficullen"
               className="p-2 rounded-lg bg-hover/50 text-primary hover:bg-primary hover:text-white transition-all duration-300"
             >
               <Github size={18} />
             </Link>
             <Link
-              href="#"
+              href="https://www.instagram.com/alfirizqyy/"
               className="p-2 rounded-lg bg-hover/50 text-primary hover:bg-primary hover:text-white transition-all duration-300"
             >
               <Instagram size={18} />
             </Link>
             <Link
-              href=""
+              href="https://www.linkedin.com/in/alfi-rizqy-6990b4372/"
               className="p-2 rounded-lg bg-hover/50 text-primary hover:bg-primary hover:text-white transition-all duration-300"
             >
               <Linkedin size={18} />
@@ -67,6 +66,7 @@ export function Footer() {
               <Link
                 href="/"
                 className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium"
+                target="_blank"
               >
                 Home
               </Link>
@@ -75,6 +75,16 @@ export function Footer() {
               <Link
                 href="/dashboard"
                 className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium"
+                target="_blank"
+              >
+                Dashboard
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/tutorial"
+                className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium"
+                target="_blank"
               >
                 Dashboard
               </Link>
@@ -83,6 +93,7 @@ export function Footer() {
               <Link
                 href="/design-system"
                 className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium"
+                target="_blank"
               >
                 Design System
               </Link>
@@ -102,11 +113,11 @@ export function Footer() {
               </div>
               <div>
                 <p className="text-sm font-semibold text-foreground">
-                  Email us
+                  Contact me
                 </p>
-                <p className="text-xs text-muted-foreground">
-                  hello@ristek.fasilkom.ui
-                </p>
+                <a href="mailto:alfirizqy2007@gmail.com" className="text-xs text-muted-foreground">
+                  alfirizqy2007@gmail.com
+                </a>
               </div>
             </div>
           </div>
