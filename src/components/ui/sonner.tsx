@@ -23,10 +23,6 @@ const Toaster = ({ ...props }: ToasterProps) => {
         classNames: {
           toast:
             "group toast flex items-center gap-3 w-full p-5 rounded-2xl border shadow-lg transition-all text-base sm:text-lg font-medium bg-card text-foreground",
-          error: "bg-[#ef4444] text-white border-[#ef4444]",
-          success: "bg-[#22c55e] text-white border-[#22c55e]",
-          warning: "bg-[#f59e0b] text-white border-[#f59e0b]",
-          default: "bg-card text-card-foreground border-border",
         },
       }}
       icons={{

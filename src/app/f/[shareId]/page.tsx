@@ -128,20 +128,20 @@ export default function PublicFormPage() {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-background pt-16 p-4 flex items-center justify-center flex-col gap-6">
-        <div className="max-w-2xl w-full bg-card mx-auto rounded-2xl p-6  text-center h-full">
+      <div className="min-h-screen bg-hover pt-16 p-4 flex items-center justify-center flex-col gap-6">
+        <div className="max-w-2xl w-full bg-card mx-auto rounded-3xl p-6  text-center h-full py-12">
           <img src="/ruby-happy.png" alt="" className="w-50 mx-auto mb-4 bg-hover rounded-full p-4" />
-          <h1 className="text-3xl font-bold text-foreground mb-4">
+          <h1 className="text-3xl font-bold text-primary mb-4">
             Response submitted!
           </h1>
           <p className="text-muted-foreground">
             Your response has been successfully recorded.
           </p>
-          <p className="text-primary underline">
-            <Link href={"/f/" + shareId}>Submit another response</Link>
+          <p onClick={()=> window.location.reload()} className="text-primary underline cursor-pointer">
+            Submit another response
           </p>
         </div>
-        <Button className="hover:-translate-y-1 transition-transform hover:shadow-xl shadow-primary/20">
+        <Button className="hover:-translate-y-1 transition-transform hover:shadow-xl shadow-primary/20 ">
           <Link href="/">
             Start making your own form
           </Link>
@@ -205,7 +205,7 @@ export default function PublicFormPage() {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-8 rounded-xl flex items-center gap-2 shadow-md transition-all focus:ring-4 focus:ring-primary/20 disabled:opacity-70 disabled:cursor-not-allowed"
+            className="bg-primary hover:bg-primary/90 text-white font-semibold w-40 h-12 rounded-xl flex items-center gap-2 shadow-md transition-all focus:ring-4 focus:ring-primary/20 disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {isSubmitting ? (
               <Loader2 className="w-5 h-5 animate-spin" />
