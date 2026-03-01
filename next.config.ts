@@ -9,14 +9,6 @@ const nextConfig: NextConfig = {
         source: "/api/express/:path*",
         destination: "/api/be/:path*",
       },
-      {
-        source: "/api-docs",
-        destination: `${process.env.BACKEND_URL || "http://localhost:4000"}/api-docs/`,
-      },
-      {
-        source: "/api-docs/:path*",
-        destination: `${process.env.BACKEND_URL || "http://localhost:4000"}/api-docs/:path*`,
-      },
     ];
   },
 };
